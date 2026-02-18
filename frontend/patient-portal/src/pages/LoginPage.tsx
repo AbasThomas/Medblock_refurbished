@@ -54,131 +54,130 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden">
+        <div className="relative min-h-screen overflow-hidden px-4 py-16">
             <BackgroundLayer />
-
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45 }}
-                className="w-full max-w-5xl z-10"
+                transition={{ duration: 0.5 }}
+                className="relative z-10 mx-auto flex w-full max-w-3xl flex-col gap-8"
             >
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="bg-white/70 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-sm p-8 text-center space-y-4">
-                        <img src={logo} alt="MEDBLOCK" className="w-24 h-24 object-contain mx-auto" />
-                        <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-                        <p className="text-gray-600 leading-relaxed">
-                            Sign in with your preferred credential—email + password or email + PIN—and keep your data ready on
-                            trusted devices.
-                        </p>
-                        <div className="space-y-4 text-left">
-                            <div className="flex items-start gap-3">
-                                <CheckCircle2 size={20} className="text-emerald-600 mt-0.5" />
-                                <p className="text-sm text-gray-700">Encrypted authentication</p>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <CheckCircle2 size={20} className="text-emerald-600 mt-0.5" />
-                                <p className="text-sm text-gray-700">Alternative PIN sign-in</p>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <CheckCircle2 size={20} className="text-emerald-600 mt-0.5" />
-                                <p className="text-sm text-gray-700">Verified NIN handling</p>
-                            </div>
+                <div className="space-y-3 text-center">
+                    <img src={logo} alt="MEDBLOCK" className="mx-auto h-32 w-32 object-contain" />
+                    <h1 className="text-4xl font-bold text-slate-900">Welcome back</h1>
+                    <p className="text-lg text-slate-600">
+                        Sign in with email + password or email + PIN and keep your health data accessible only to you.
+                    </p>
+                </div>
+
+                <div className="rounded-[32px] border border-white/80 bg-white/90 p-8 shadow-2xl shadow-slate-900/10">
+                    {error && (
+                        <div className="mb-5 flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-700">
+                            <AlertTriangle size={20} />
+                            {error}
                         </div>
+                    )}
+
+                    <div className="mb-6 flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setAuthMode('password')}
+                            className={`flex-1 rounded-2xl border px-4 py-2 text-sm font-semibold transition ${authMode === 'password'
+                                ? 'border-blue-600 bg-blue-50 text-blue-700'
+                                : 'border-slate-200 text-slate-600 hover:border-blue-300'
+                                }`}
+                        >
+                            Email + Password
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setAuthMode('pin')}
+                            className={`flex-1 rounded-2xl border px-4 py-2 text-sm font-semibold transition ${authMode === 'pin'
+                                ? 'border-blue-600 bg-blue-50 text-blue-700'
+                                : 'border-slate-200 text-slate-600 hover:border-blue-300'
+                                }`}
+                        >
+                            Email + PIN
+                        </button>
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur-2xl rounded-3xl shadow-sm p-6 md:p-10 border border-white/60">
-                        {error && (
-                            <div className="mb-5 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 flex items-center gap-3 text-sm">
-                                <AlertTriangle className="flex-shrink-0" size={18} />
-                                {error}
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+                            <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <input
+                                    required
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="you@example.com"
+                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                />
                             </div>
-                        )}
-
-                        <div className="flex gap-3 mb-6">
-                            <button
-                                type="button"
-                                onClick={() => setAuthMode('password')}
-                                className={`flex-1 px-4 py-2 rounded-xl font-semibold text-sm border ${authMode === 'password'
-                                    ? 'bg-blue-600 text-white border-transparent'
-                                    : 'text-gray-600 border-gray-200 hover:border-blue-400'
-                                    }`}
-                            >
-                                Email + Password
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setAuthMode('pin')}
-                                className={`flex-1 px-4 py-2 rounded-xl font-semibold text-sm border ${authMode === 'pin'
-                                    ? 'bg-blue-600 text-white border-transparent'
-                                    : 'text-gray-600 border-gray-200 hover:border-blue-400'
-                                    }`}
-                            >
-                                Email + PIN
-                            </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5">
+                        {authMode === 'password' ? (
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                    <input
-                                        required
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                        placeholder="john.doe@example.com"
-                                    />
-                                </div>
-                            </div>
-
-                            {authMode === 'password' ? (
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                        <input
-                                            required
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                            placeholder="Enter your password"
-                                        />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">5-digit PIN</label>
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                     <input
                                         required
                                         type="password"
-                                        value={pin}
-                                        onChange={(e) => setPin(e.target.value)}
-                                        maxLength={5}
-                                        className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none tracking-[0.2em]"
-                                        placeholder="•••••"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="Enter your password"
+                                        className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                                     />
                                 </div>
-                            )}
+                            </div>
+                        ) : (
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                    5-digit PIN
+                                </label>
+                                <input
+                                    required
+                                    type="password"
+                                    value={pin}
+                                    onChange={(e) => setPin(e.target.value)}
+                                    maxLength={5}
+                                    placeholder="•••••"
+                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-center text-sm tracking-[0.3em] text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                />
+                            </div>
+                        )}
 
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full bg-blue-600 text-white rounded-xl px-6 py-4 font-semibold transition-all duration-200 shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                                {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Shield size={20} />}
-                                {isSubmitting ? 'Signing In...' : 'Sign In'}
-                            </button>
-                        </form>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+                        >
+                            {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Shield size={20} />}
+                            {isSubmitting ? 'Signing In...' : 'Sign In'}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 space-y-3 text-sm text-slate-600">
+                        <div className="flex items-center gap-3">
+                            <CheckCircle2 className="text-emerald-600" />
+                            <span>Encrypted authentication</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <CheckCircle2 className="text-emerald-600" />
+                            <span>PIN alternative for trusted devices</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <CheckCircle2 className="text-emerald-600" />
+                            <span>NIN-aware identity checks</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="mt-8 text-center">
-                    <Link to="/user-selection" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors inline-flex items-center gap-1">
-                        <ArrowLeft size={14} /> Back to Role Selection
+                <div className="text-center text-sm text-slate-600">
+                    <Link to="/user-selection" className="inline-flex items-center gap-2 font-semibold text-blue-600 transition hover:text-blue-800">
+                        <ArrowLeft size={16} /> Back to role selection
                     </Link>
                 </div>
             </motion.div>

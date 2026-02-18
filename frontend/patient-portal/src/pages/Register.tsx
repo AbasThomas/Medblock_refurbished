@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     AlertTriangle,
     ArrowLeft,
@@ -43,6 +43,13 @@ const initialForm: RegisterForm = {
     acceptData: false,
 }
 
+const highlights = [
+    'Email and password authentication',
+    'Consent-managed access control',
+    'Immutable audit traces',
+    'Secure handling of medical data',
+]
+
 export default function Register() {
     const navigate = useNavigate()
     const { login } = useAuth()
@@ -57,6 +64,7 @@ export default function Register() {
     const [nin, setNin] = useState('')
     const [pinError, setPinError] = useState('')
     const [captchaError, setCaptchaError] = useState('')
+    const [step, setStep] = useState<'form' | 'generating'>('form')
 
     useEffect(() => {
         const code = Math.random().toString(36).substring(2, 7).toUpperCase()
@@ -99,6 +107,7 @@ export default function Register() {
         }
 
         setIsSubmitting(true)
+        setStep('generating')
         try {
             const result = await apiService.registerPatient({
                 email: formData.email,
@@ -128,185 +137,188 @@ export default function Register() {
             setError(err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Failed to create account')
         } finally {
             setIsSubmitting(false)
+            setStep('form')
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden">
+        <div className="relative min-h-screen overflow-hidden px-4 py-16">
             <BackgroundLayer />
-
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45 }}
-                className="w-full max-w-6xl z-10"
+                transition={{ duration: 0.5 }}
+                className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-10"
             >
-                <div className="grid grid-cols-1 xl:grid-cols-5 gap-8 items-start">
-                    <div className="xl:col-span-2">
-                        <div className="bg-white/70 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-sm p-8 h-full">
-                            <img src={logo} alt="MEDBLOCK" className="w-24 h-24 object-contain mb-6" />
-                            <h1 className="text-3xl font-bold text-gray-900 mb-3">Create Your Patient Account</h1>
-                            <p className="text-gray-600 mb-8 leading-relaxed">
-                                Register with email and password, then access your records securely from any authorized device.
-                            </p>
-
-                            <div className="space-y-4">
-                                {[
-                                    'Email and password authentication',
-                                    'Consent-managed access control',
-                                    'Immutable audit visibility of record access',
-                                    'Secure encrypted medical data handling',
-                                ].map((item) => (
-                                    <div key={item} className="flex items-start gap-3">
-                                        <CheckCircle2 size={20} className="text-emerald-600 mt-0.5 flex-shrink-0" />
-                                        <p className="text-sm text-gray-700">{item}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                <div className="space-y-4 text-center">
+                    <img src={logo} alt="MEDBLOCK" className="mx-auto h-32 w-32 object-contain" />
+                    <div>
+                        <h1 className="text-4xl font-bold text-slate-900">Create your patient account</h1>
+                        <p className="mx-auto mt-2 max-w-2xl text-lg text-slate-600">
+                            Register securely with email, password, PIN, and NIN verification for trusted access.
+                        </p>
                     </div>
+                    <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-3 text-sm text-slate-600">
+                        {highlights.map((item) => (
+                            <span key={item} className="rounded-2xl border border-slate-200 px-4 py-2">
+                                {item}
+                            </span>
+                        ))}
+                    </div>
+                </div>
 
-                    <div className="xl:col-span-3 bg-white/80 backdrop-blur-2xl rounded-3xl shadow-sm p-6 md:p-10 border border-white/60">
-                        {error && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 flex items-center gap-3 text-sm">
-                                <AlertTriangle className="flex-shrink-0" size={18} />
-                                {error}
-                            </div>
-                        )}
-
-                        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">First Name</label>
-                                        <div className="relative">
-                                            <UserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                            <input
-                                                required
-                                                type="text"
-                                                value={formData.givenName}
-                                                onChange={(e) => onChange('givenName', e.target.value)}
-                                                className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                                placeholder="John"
-                                            />
-                                        </div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="rounded-[32px] border border-white/80 bg-white/90 p-8 shadow-2xl shadow-slate-900/10"
+                >
+                    <AnimatePresence mode="wait">
+                        {step === 'form' && (
+                            <motion.div
+                                key="form-content"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                className="space-y-6"
+                            >
+                                {error && (
+                                    <div className="flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-700">
+                                        <AlertTriangle size={20} />
+                                        {error}
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Last Name</label>
-                                        <div className="relative">
-                                            <UserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                            <input
-                                                required
-                                                type="text"
-                                                value={formData.familyName}
-                                                onChange={(e) => onChange('familyName', e.target.value)}
-                                                className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                                placeholder="Doe"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Gender</label>
-                                    <select
-                                        value={formData.gender}
-                                        onChange={(e) => onChange('gender', e.target.value)}
-                                        className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                    >
-                                        <option value="unknown">Prefer not to say</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date of Birth</label>
-                                    <input
-                                        type="date"
-                                        value={formData.birthDate}
-                                        onChange={(e) => onChange('birthDate', e.target.value)}
-                                        className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-5">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                        <input
-                                            required
-                                            type="email"
-                                            value={formData.email}
-                                            onChange={(e) => onChange('email', e.target.value)}
-                                            className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                            placeholder="john.doe@example.com"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number</label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                        <input
-                                            type="tel"
-                                            value={formData.phone}
-                                            onChange={(e) => onChange('phone', e.target.value)}
-                                            className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                            placeholder="+234..."
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
-                                        <div className="relative">
-                                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                            <input
-                                                required
-                                                type="password"
-                                                value={formData.password}
-                                                onChange={(e) => onChange('password', e.target.value)}
-                                                className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                                placeholder="At least 8 characters"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password</label>
-                                        <div className="relative">
-                                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                            <input
-                                                required
-                                                type="password"
-                                                value={formData.confirmPassword}
-                                                onChange={(e) => onChange('confirmPassword', e.target.value)}
-                                                className="w-full pl-10 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                                placeholder="Re-enter password"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                )}
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div className="grid gap-4 md:grid-cols-2">
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">National ID (NIN)</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">First Name</label>
+                                            <div className="relative">
+                                                <UserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    required
+                                                    type="text"
+                                                    value={formData.givenName}
+                                                    onChange={(e) => onChange('givenName', e.target.value)}
+                                                    placeholder="John"
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Last Name</label>
+                                            <div className="relative">
+                                                <UserRound className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    required
+                                                    type="text"
+                                                    value={formData.familyName}
+                                                    onChange={(e) => onChange('familyName', e.target.value)}
+                                                    placeholder="Doe"
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Gender</label>
+                                            <select
+                                                value={formData.gender}
+                                                onChange={(e) => onChange('gender', e.target.value)}
+                                                className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                            >
+                                                <option value="unknown">Prefer not to say</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
+                                            <input
+                                                type="date"
+                                                value={formData.birthDate}
+                                                onChange={(e) => onChange('birthDate', e.target.value)}
+                                                className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                                            <div className="relative">
+                                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    required
+                                                    type="email"
+                                                    value={formData.email}
+                                                    onChange={(e) => onChange('email', e.target.value)}
+                                                    placeholder="john.doe@example.com"
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number</label>
+                                            <div className="relative">
+                                                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    type="tel"
+                                                    value={formData.phone}
+                                                    onChange={(e) => onChange('phone', e.target.value)}
+                                                    placeholder="+234..."
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                                            <div className="relative">
+                                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    required
+                                                    type="password"
+                                                    value={formData.password}
+                                                    onChange={(e) => onChange('password', e.target.value)}
+                                                    placeholder="At least 8 characters"
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Confirm Password</label>
+                                            <div className="relative">
+                                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <input
+                                                    required
+                                                    type="password"
+                                                    value={formData.confirmPassword}
+                                                    onChange={(e) => onChange('confirmPassword', e.target.value)}
+                                                    placeholder="Re-enter your password"
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid gap-4 md:grid-cols-2">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">National ID (NIN)</label>
                                             <input
                                                 type="text"
                                                 value={nin}
                                                 onChange={(e) => setNin(e.target.value)}
-                                                className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                                 placeholder="e.g., 12345678901"
+                                                className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                                                 Security PIN
                                                 {pinError && <span className="text-rose-600 text-xs font-normal ml-2">{pinError}</span>}
                                             </label>
@@ -315,92 +327,122 @@ export default function Register() {
                                                 value={pin}
                                                 onChange={(e) => setPin(e.target.value)}
                                                 maxLength={5}
-                                                className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none tracking-[0.2em]"
                                                 placeholder="•••••"
+                                                className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-center text-sm tracking-[0.3em] text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            id="remember-me-signup"
-                                            type="checkbox"
-                                            checked={rememberMe}
-                                            onChange={(e) => setRememberMe(e.target.checked)}
-                                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                                        />
-                                        <label htmlFor="remember-me-signup" className="text-sm text-gray-700 font-medium">
-                                            Remember me on this device
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                id="remember-me-signup"
+                                                type="checkbox"
+                                                checked={rememberMe}
+                                                onChange={(e) => setRememberMe(e.target.checked)}
+                                                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                            />
+                                            <label htmlFor="remember-me-signup" className="text-sm text-slate-700 font-medium">
+                                                Remember me on this device
+                                            </label>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-semibold text-slate-700">Security CAPTCHA</label>
+                                            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm font-mono text-slate-800">
+                                                <span className="tracking-[0.4em]">{captchaCode}</span>
+                                                <button
+                                                    type="button"
+                                                    className="text-blue-600 font-semibold"
+                                                    onClick={() =>
+                                                        setCaptchaCode(Math.random().toString(36).substring(2, 7).toUpperCase())
+                                                    }
+                                                >
+                                                    Refresh
+                                                </button>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={captcha}
+                                                onChange={(e) => setCaptcha(e.target.value)}
+                                                placeholder="Enter CAPTCHA code"
+                                                className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 tracking-[0.3em]"
+                                            />
+                                            {captchaError && <p className="text-xs text-rose-600">{captchaError}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 rounded-2xl border border-blue-100 bg-blue-50/70 p-4 text-sm text-slate-700">
+                                        <p className="font-semibold text-blue-900">Consent & transparency</p>
+                                        <label className="flex items-start gap-3 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.acceptTerms}
+                                                onChange={(e) => onChange('acceptTerms', e.target.checked)}
+                                                className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                            />
+                                            I agree to the Terms and Conditions
+                                        </label>
+                                        <label className="flex items-start gap-3 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.acceptData}
+                                                onChange={(e) => onChange('acceptData', e.target.checked)}
+                                                className="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                            />
+                                            I consent to processing of my medical data
                                         </label>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-gray-700">Security CAPTCHA</label>
-                                        <div className="flex items-center justify-between border border-gray-200 rounded-xl px-4 py-3 bg-gray-50/80">
-                                            <span className="tracking-widest text-lg font-mono text-gray-900">{captchaCode}</span>
-                                            <button
-                                                type="button"
-                                                className="text-blue-600 text-sm font-semibold"
-                                                onClick={() =>
-                                                    setCaptchaCode(Math.random().toString(36).substring(2, 7).toUpperCase())
-                                                }
-                                            >
-                                                Refresh
-                                            </button>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            value={captcha}
-                                            onChange={(e) => setCaptcha(e.target.value)}
-                                            className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none tracking-[0.2em]"
-                                            placeholder="Enter CAPTCHA code"
-                                        />
-                                        {captchaError && <p className="text-xs text-rose-600">{captchaError}</p>}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+                                    >
+                                        {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Shield size={20} />}
+                                        {isSubmitting ? 'Creating account...' : 'Create account'}
+                                    </button>
+                                </form>
+                            </motion.div>
+                        )}
+
+                        {step === 'generating' && (
+                            <motion.div
+                                key="generating"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="space-y-6 text-center"
+                            >
+                                <div className="inline-flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg">
+                                    <Loader2 size={40} className="animate-spin text-blue-600" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-slate-900">Preparing your identity</h2>
+                                <p className="text-sm text-slate-500">
+                                    Verifying your email, generating your secure PIN, and provisioning a DID.
+                                </p>
+                                <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm">
+                                    <div className="flex items-center justify-between text-slate-600">
+                                        <span>Verification email</span>
+                                        <span className="font-semibold text-blue-600">In progress</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-slate-600">
+                                        <span>Identity provisioning</span>
+                                        <span className="font-semibold text-blue-600">Encrypting</span>
                                     </div>
                                 </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
 
-                                <div className="space-y-3 bg-blue-50/70 p-4 rounded-xl border border-blue-100">
-                                    <label className="flex items-start gap-3 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.acceptTerms}
-                                            onChange={(e) => onChange('acceptTerms', e.target.checked)}
-                                            className="h-5 w-5 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                        <span className="text-sm text-gray-700">I agree to the Terms and Conditions</span>
-                                    </label>
-
-                                    <label className="flex items-start gap-3 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.acceptData}
-                                            onChange={(e) => onChange('acceptData', e.target.checked)}
-                                            className="h-5 w-5 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                        <span className="text-sm text-gray-700">I consent to processing of my medical data</span>
-                                    </label>
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full bg-blue-600 text-white rounded-xl px-6 py-4 font-semibold transition-all duration-200 shadow-sm  disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                >
-                                    {isSubmitting ? <Loader2 size={20} className="animate-spin" /> : <Shield size={20} />}
-                                    {isSubmitting ? 'Creating Account...' : 'Create Account'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div className="mt-8 text-center space-y-4">
-                    <Link to="/user-selection" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors inline-flex items-center gap-1">
-                        <ArrowLeft size={14} /> Back to Role Selection
+                <div className="space-y-2 text-center text-sm text-slate-600">
+                    <Link to="/user-selection" className="inline-flex items-center gap-2 font-semibold text-blue-600 transition hover:text-blue-800">
+                        <ArrowLeft size={16} /> Back to role selection
                     </Link>
-                    <p className="text-sm text-gray-500">
+                    <p>
                         Already have an account?{' '}
-                        <Link to="/login" className="text-blue-600 font-semibold hover:underline">
+                        <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-800">
                             Sign in
                         </Link>
                     </p>
@@ -409,5 +451,3 @@ export default function Register() {
         </div>
     )
 }
-
-
