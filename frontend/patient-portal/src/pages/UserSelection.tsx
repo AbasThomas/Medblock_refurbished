@@ -77,11 +77,6 @@ const UserSelection: React.FC = () => {
 
                 <div className="grid w-full gap-6 md:grid-cols-2">
                     {portals.map((portal, index) => {
-                        const Card = portal.isExternal ? 'a' : Link
-                        const props = portal.isExternal
-                            ? { href: portal.href, target: '_blank', rel: 'noreferrer' }
-                            : { to: portal.href }
-
                         const Icon = portal.icon
 
                         return (
@@ -92,27 +87,53 @@ const UserSelection: React.FC = () => {
                                 transition={{ delay: 0.15 * index }}
                                 className="group"
                             >
-                                <Card
-                                    {...props}
-                                    className="flex h-full flex-col justify-between gap-6 rounded-[32px] border border-white/70 bg-white/80 px-8 py-10 text-left shadow-2xl shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-2 hover:border-blue-200"
-                                >
-                                    <div className="flex flex-col gap-6">
-                                        <div
-                                            className={`flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br ${portal.accent} text-blue-600 transition-all duration-300 group-hover:scale-105`}
-                                        >
-                                            <Icon size={48} />
+                                {portal.isExternal ? (
+                                    <a
+                                        href={portal.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex h-full flex-col justify-between gap-6 rounded-[32px] border border-white/70 bg-white/80 px-8 py-10 text-left shadow-2xl shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-2 hover:border-blue-200"
+                                    >
+                                        <div className="flex flex-col gap-6">
+                                            <div
+                                                className={`flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br ${portal.accent} text-blue-600 transition-all duration-300 group-hover:scale-105`}
+                                            >
+                                                <Icon size={48} />
+                                            </div>
+                                            <div>
+                                                <p className="text-2xl font-semibold text-slate-900">{portal.title}</p>
+                                                <p className="mt-2 text-sm text-slate-500">{portal.description}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="text-2xl font-semibold text-slate-900">{portal.title}</p>
-                                            <p className="mt-2 text-sm text-slate-500">{portal.description}</p>
+                                        <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
+                                            <span className="inline-flex items-center gap-2 text-blue-600">
+                                                {portal.cta} <ArrowRight size={18} />
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
-                                        <span className="inline-flex items-center gap-2 text-blue-600">
-                                            {portal.cta} <ArrowRight size={18} />
-                                        </span>
-                                    </div>
-                                </Card>
+                                    </a>
+                                ) : (
+                                    <Link
+                                        to={portal.href}
+                                        className="flex h-full flex-col justify-between gap-6 rounded-[32px] border border-white/70 bg-white/80 px-8 py-10 text-left shadow-2xl shadow-slate-900/5 transition-transform duration-300 hover:-translate-y-2 hover:border-blue-200"
+                                    >
+                                        <div className="flex flex-col gap-6">
+                                            <div
+                                                className={`flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br ${portal.accent} text-blue-600 transition-all duration-300 group-hover:scale-105`}
+                                            >
+                                                <Icon size={48} />
+                                            </div>
+                                            <div>
+                                                <p className="text-2xl font-semibold text-slate-900">{portal.title}</p>
+                                                <p className="mt-2 text-sm text-slate-500">{portal.description}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between text-sm font-semibold text-slate-700">
+                                            <span className="inline-flex items-center gap-2 text-blue-600">
+                                                {portal.cta} <ArrowRight size={18} />
+                                            </span>
+                                        </div>
+                                    </Link>
+                                )}
                             </motion.div>
                         )
                     })}

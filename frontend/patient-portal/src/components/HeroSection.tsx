@@ -1,100 +1,204 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import {
-    Activity,
-    ArrowRight,
-    Database,
-    PlayCircle,
-    Shield,
-    Users,
-} from 'lucide-react'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { ArrowRight, Shield, Lock, Zap, Users, Activity, Fingerprint, QrCode } from 'lucide-react'
 
 const HeroSection: React.FC = () => {
-    const stats = [
-        { icon: Shield, label: 'Data Integrity', value: 'Immutable Audit Trails' },
-        { icon: Database, label: 'FHIR Records', value: 'Interoperable by Design' },
-        { icon: Users, label: 'Patient Control', value: 'Consent Driven Access' },
-        { icon: Activity, label: 'Real-time Access', value: 'No Siloed Histories' },
-    ]
+    // 3D Card Effect Logic
+    const cardRef = useRef<HTMLDivElement>(null)
+    const x = useMotionValue(0)
+    const y = useMotionValue(0)
+
+    const mouseX = useSpring(x, { stiffness: 50, damping: 20 })
+    const mouseY = useSpring(y, { stiffness: 50, damping: 20 })
+
+    const rotateX = useTransform(mouseY, [-0.5, 0.5], [15, -15])
+    const rotateY = useTransform(mouseX, [-0.5, 0.5], [-15, 15])
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return
+        const rect = cardRef.current.getBoundingClientRect()
+        const width = rect.width
+        const height = rect.height
+        const mouseXVal = e.clientX - rect.left
+        const mouseYVal = e.clientY - rect.top
+        const xPct = mouseXVal / width - 0.5
+        const yPct = mouseYVal / height - 0.5
+        x.set(xPct)
+        y.set(yPct)
+    }
+
+    const handleMouseLeave = () => {
+        x.set(0)
+        y.set(0)
+    }
 
     return (
-        <section className="relative flex flex-col items-center pt-[130px] mb-20 overflow-hidden">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center z-10 mt-16">
+        <section className="relative flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-12 lg:py-24 max-w-7xl mx-auto overflow-visible">
+
+            {/* Left Content */}
+            <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left z-10">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold mb-8 border border-blue-200"
+                    className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 backdrop-blur-sm"
                 >
-                    <span className="flex items-center gap-1 bg-white px-2 py-1 rounded-full text-xs font-bold text-blue-700 border border-blue-200">
-                        <Activity size={14} />
-                        Live
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                     </span>
-                    Healthcare interoperability for Nigeria
+                    MEDBLOCK Patient Portal
                 </motion.div>
 
                 <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight mb-6 max-w-5xl leading-tight"
+                    className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] text-slate-900 tracking-tight"
                 >
-                    Blockchain-Secured
-                    <span className="block text-blue-700">
-                        National EMR
+                    Your Health Identity. <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                        Secure & Portable.
                     </span>
                 </motion.h1>
 
                 <motion.p
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.55, delay: 0.2 }}
-                    className="text-xl md:text-2xl text-gray-600 max-w-3xl mb-10 leading-relaxed font-medium"
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
                 >
-                    Unified patient records, tamper-proof integrity, and consent-first data sharing
-                    for providers, labs, HMOs, and government institutions.
+                    Own your medical history with a blockchain-secured passport. Share access instantly with doctors, labs, and HMOs—only when you say so.
                 </motion.p>
-
-                <div className="grid w-full max-w-5xl grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-                    {stats.map((stat, idx) => (
-                        <motion.div
-                            key={stat.label}
-                            initial={{ opacity: 0, y: 24 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.15 + idx * 0.08, duration: 0.45 }}
-                            whileHover={{ y: -6, scale: 1.02 }}
-                            className="rounded-2xl border border-white/60 bg-white/90 p-5 shadow-sm backdrop-blur-sm text-left"
-                        >
-                            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-white">
-                                <stat.icon size={34} />
-                            </div>
-                            <div className="text-sm text-gray-500">{stat.label}</div>
-                            <div className="text-sm font-semibold text-gray-900 mt-1">{stat.value}</div>
-                        </motion.div>
-                    ))}
-                </div>
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35, duration: 0.45 }}
-                    className="flex flex-col sm:flex-row gap-4 mb-16"
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
                 >
                     <Link
                         to="/register"
-                        className="group px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg transition-all duration-300 transform hover:-translate-y-1 hover:bg-blue-700 flex items-center gap-2"
+                        className="group relative inline-flex items-center gap-2 rounded-full bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-all hover:bg-slate-800 hover:shadow-slate-900/30 hover:-translate-y-1"
                     >
-                        Create Patient Account
-                        <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                        Create My Account
+                        <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                     </Link>
-                    <button
-                        onClick={() => document.getElementById('problem')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group px-8 py-4 bg-white text-gray-700 border border-gray-300 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
+                    <Link
+                        to="/login"
+                        className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors"
                     >
-                        <PlayCircle size={24} />
-                        Explore Platform
-                    </button>
+                        Log in to existing account
+                    </Link>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                    className="pt-8 flex items-center justify-center lg:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+                >
+                    {/* Trust indicators could go here */}
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                        <Shield size={16} /> NDPR Compliant
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                        <Lock size={16} /> AES-256 Encryption
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Right Visual - 3D Card */}
+            <div className="w-full lg:w-1/2 mt-16 lg:mt-0 relative perspective-1000 flex items-center justify-center">
+
+                {/* Decorative Background Elements */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+
+                <motion.div
+                    ref={cardRef}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                        rotateX,
+                        rotateY,
+                        transformStyle: "preserve-3d",
+                    }}
+                    initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
+                    animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="relative w-full max-w-md aspect-[1.586/1] rounded-[2rem] bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-2xl shadow-blue-900/40 cursor-pointer group"
+                >
+                    {/* Card Shine Effect */}
+                    <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"></div>
+
+                    {/* Card Content Layer 1 (Base) */}
+                    <div className="relative z-10 h-full flex flex-col justify-between text-white/90">
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-500/20 rounded-xl backdrop-blur-md border border-blue-500/30">
+                                    <Activity className="text-blue-400" size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg leading-tight tracking-wide">MEDBLOCK</h3>
+                                    <p className="text-[10px] text-blue-300 font-mono tracking-wider uppercase">Universal Health ID</p>
+                                </div>
+                            </div>
+                            <QrCode className="text-white/20" size={32} />
+                        </div>
+
+                        <div className="space-y-4">
+                            <div className="flex items-end gap-4">
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center shadow-lg border border-white/10">
+                                    <Users size={28} className="text-white" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-1">Patient Name</p>
+                                    <div className="h-6 w-32 bg-white/10 rounded animate-pulse"></div>
+                                </div>
+                            </div>
+                            <div className="flex gap-8">
+                                <div>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">ID Number</p>
+                                    <p className="font-mono text-blue-200 tracking-widest text-sm">•••• •••• •••• 8842</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Valid Thru</p>
+                                    <p className="font-mono text-white text-sm">12/29</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Floating Elements (Parallax) */}
+                    <motion.div
+                        style={{ x: useTransform(mouseX, [-0.5, 0.5], [-10, 10]), y: useTransform(mouseY, [-0.5, 0.5], [-10, 10]) }}
+                        className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 z-30 flex items-center gap-3"
+                    >
+                        <div className="bg-emerald-100 p-2 rounded-full">
+                            <Shield className="text-emerald-600" size={20} />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-slate-800">Verified</p>
+                            <p className="text-[10px] text-slate-500">Identity Confirmed</p>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        style={{ x: useTransform(mouseX, [-0.5, 0.5], [15, -15]), y: useTransform(mouseY, [-0.5, 0.5], [15, -15]) }}
+                        className="absolute -bottom-4 -left-8 bg-white/90 backdrop-blur-xl p-4 rounded-2xl shadow-xl border border-white/50 z-30"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-100 p-2 rounded-full">
+                                <Fingerprint className="text-blue-600" size={20} />
+                            </div>
+                            <div>
+                                <p className="text-xs font-bold text-slate-800">Biometric</p>
+                                <p className="text-[10px] text-slate-500">Access Enabled</p>
+                            </div>
+                        </div>
+                    </motion.div>
+
                 </motion.div>
             </div>
         </section>

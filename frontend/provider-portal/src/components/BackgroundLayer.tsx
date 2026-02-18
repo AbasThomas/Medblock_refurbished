@@ -33,21 +33,27 @@ const BackgroundLayer: React.FC = () => {
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.set(verticalRefs.current, { scaleY: 0, opacity: 0.22, transformOrigin: 'center top' })
-            gsap.set(horizontalRefs.current, { scaleX: 0, opacity: 0.18, transformOrigin: 'left center' })
+            gsap.set(verticalRefs.current, { scaleY: 0, opacity: 0.18, transformOrigin: 'center top' })
+            gsap.set(horizontalRefs.current, { scaleX: 0, opacity: 0.15, transformOrigin: 'left top' })
 
-            gsap.timeline({ defaults: { ease: 'power2.out' } })
-                .to(verticalRefs.current, { scaleY: 1, opacity: 0.48, stagger: 0.05, duration: 0.65 })
-                .to(horizontalRefs.current, { scaleX: 1, opacity: 0.38, stagger: 0.04, duration: 0.5 }, 0.22)
-
-            if (backgroundRef.current) {
-                gsap.to(backgroundRef.current, {
-                    backgroundPosition: `${GRID_SIZE}px ${GRID_SIZE}px`,
-                    duration: 24,
-                    ease: 'none',
-                    repeat: -1,
+            const drawTl = gsap.timeline({ defaults: { ease: 'power2.out' } })
+            drawTl
+                .to(verticalRefs.current, {
+                    scaleY: 1,
+                    opacity: 0.5,
+                    stagger: { each: 0.04, from: 'start' },
+                    duration: 0.6,
                 })
-            }
+                .to(
+                    horizontalRefs.current,
+                    {
+                        scaleX: 1,
+                        opacity: 0.35,
+                        stagger: { each: 0.025, from: 'start' },
+                        duration: 0.45,
+                    },
+                    0.25,
+                )
         })
 
         return () => ctx.revert()
@@ -56,23 +62,11 @@ const BackgroundLayer: React.FC = () => {
     return (
         <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden print:hidden">
             <div
-                className="absolute inset-0"
-                style={{
-                    height: '340px',
-                    background: '#eef2f7',
-                    WebkitMaskImage: 'radial-gradient(circle at top center, black 58%, transparent 130%)',
-                    maskImage: 'radial-gradient(circle at top center, black 58%, transparent 100%)',
-                }}
-            />
-
-            <div
                 ref={backgroundRef}
                 className="absolute inset-x-0 top-0 opacity-70"
                 style={{
                     height: `${height}px`,
-                    backgroundImage:
-                        'linear-gradient(rgba(114, 129, 167, 0.08) 1px, transparent 1px), linear-gradient(to right, rgba(114, 129, 167, 0.08) 1px, transparent 1px)',
-                    backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+                    backgroundColor: '#f4f6fb',
                     maskImage: 'radial-gradient(ellipse at top, black 34%, transparent 72%)',
                     WebkitMaskImage: 'radial-gradient(ellipse at top, black 34%, transparent 72%)',
                 }}

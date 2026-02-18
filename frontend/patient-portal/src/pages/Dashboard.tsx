@@ -299,50 +299,36 @@ export default function Dashboard() {
             {/* Welcome Banner */}
             <motion.div
                 variants={itemVariants}
-                className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-2xl overflow-hidden"
+                className="relative border border-slate-200 bg-white/95 p-6 md:p-8 text-slate-900 shadow-xl"
             >
-                <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
-                <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/10 rounded-full -mr-24 -mt-24 blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-500/10 rounded-full -ml-24 -mb-24 blur-3xl" />
-
-                <div className="relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
-                        <div>
-                            <motion.h1
-                                className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 }}
-                            >
-                                Welcome back, {profile?.name?.[0]?.given?.[0] || 'Patient'}!
-                            </motion.h1>
-                            <motion.p
-                                className="text-blue-200 mt-2 text-sm md:text-base"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3 }}
-                            >
-                                Your health data is secure on the Cardano blockchain
-                            </motion.p>
-                            <motion.p
-                                className="text-blue-100 mt-2 text-sm font-mono"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.35 }}
-                            >
-                                {mixedPatientId}
-                            </motion.p>
-                        </div>
-                        <motion.button
-                            onClick={handleRefreshData}
-                            whileHover={{ scale: 1.05, rotate: 180 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 transition-all duration-300"
+                <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+                    <div>
+                        <motion.h1
+                            className="text-2xl md:text-3xl font-bold"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
                         >
-                            <RefreshCw size={18} />
-                            <span className="text-sm font-medium">Refresh</span>
-                        </motion.button>
+                            Welcome back, {profile?.name?.[0]?.given?.[0] || 'Patient'}!
+                        </motion.h1>
+                        <motion.p
+                            className="mt-2 text-sm text-slate-600 md:text-base"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Your health data ID is {mixedPatientId}
+                        </motion.p>
                     </div>
+                    <motion.button
+                        onClick={handleRefreshData}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition"
+                    >
+                        <RefreshCw size={18} />
+                        <span>Refresh</span>
+                    </motion.button>
                 </div>
             </motion.div>
 
