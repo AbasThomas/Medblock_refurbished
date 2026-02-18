@@ -77,8 +77,7 @@ const Footer: React.FC = () => {
                             </h2>
                         </div>
                         <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
-                            Nigeria's pioneering Blockchain-Secured National Electronic Medical Records Infrastructure. 
-                            Empowering healthcare through decentralized technology on Cardano.
+                            Nigeria's pioneering secure health data platform. Empowering care teams with trust, consent, and realtime sharing.
                         </p>
                         
                         {/* Contact Information */}

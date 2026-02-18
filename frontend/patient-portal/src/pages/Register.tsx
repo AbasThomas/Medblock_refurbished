@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -50,6 +50,18 @@ export default function Register() {
     const [formData, setFormData] = useState<RegisterForm>(initialForm)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [rememberMe, setRememberMe] = useState(false)
+    const [captcha, setCaptcha] = useState('')
+    const [captchaCode, setCaptchaCode] = useState('')
+    const [pin, setPin] = useState('')
+    const [nin, setNin] = useState('')
+    const [pinError, setPinError] = useState('')
+    const [captchaError, setCaptchaError] = useState('')
+
+    useEffect(() => {
+        const code = Math.random().toString(36).substring(2, 7).toUpperCase()
+        setCaptchaCode(code)
+    }, [])
 
     const onChange = <K extends keyof RegisterForm>(key: K, value: RegisterForm[K]) => {
         setFormData((prev) => ({ ...prev, [key]: value }))
@@ -58,6 +70,8 @@ export default function Register() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError(null)
+        setPinError('')
+        setCaptchaError('')
 
         if (formData.password.length < 8) {
             setError('Password must be at least 8 characters.')
@@ -71,6 +85,16 @@ export default function Register() {
 
         if (!formData.acceptTerms || !formData.acceptData) {
             setError('Please accept both consent checkboxes to continue.')
+            return
+        }
+
+        if (!/^\d{5}$/.test(pin)) {
+            setPinError('PIN must be exactly five digits.')
+            return
+        }
+
+        if (captcha.trim().toUpperCase() !== captchaCode) {
+            setCaptchaError('CAPTCHA does not match.')
             return
         }
 
@@ -89,9 +113,16 @@ export default function Register() {
                 birth_date: formData.birthDate || undefined,
                 telecom: formData.phone ? [{ system: 'phone', value: formData.phone }] : [],
                 address: [],
+                nin: nin || undefined,
+                pin,
             })
 
             login(result.did, result.patient_id, result.accessToken)
+            if (rememberMe) {
+                localStorage.setItem('patient_remember', 'true')
+            } else {
+                localStorage.removeItem('patient_remember')
+            }
             navigate('/dashboard')
         } catch (err: any) {
             setError(err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Failed to create account')
@@ -259,6 +290,72 @@ export default function Register() {
                                                 placeholder="Re-enter password"
                                             />
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">National ID (NIN)</label>
+                                            <input
+                                                type="text"
+                                                value={nin}
+                                                onChange={(e) => setNin(e.target.value)}
+                                                className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                                placeholder="e.g., 12345678901"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                                Security PIN
+                                                {pinError && <span className="text-rose-600 text-xs font-normal ml-2">{pinError}</span>}
+                                            </label>
+                                            <input
+                                                type="password"
+                                                value={pin}
+                                                onChange={(e) => setPin(e.target.value)}
+                                                maxLength={5}
+                                                className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none tracking-[0.2em]"
+                                                placeholder="•••••"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            id="remember-me-signup"
+                                            type="checkbox"
+                                            checked={rememberMe}
+                                            onChange={(e) => setRememberMe(e.target.checked)}
+                                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        />
+                                        <label htmlFor="remember-me-signup" className="text-sm text-gray-700 font-medium">
+                                            Remember me on this device
+                                        </label>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-gray-700">Security CAPTCHA</label>
+                                        <div className="flex items-center justify-between border border-gray-200 rounded-xl px-4 py-3 bg-gray-50/80">
+                                            <span className="tracking-widest text-lg font-mono text-gray-900">{captchaCode}</span>
+                                            <button
+                                                type="button"
+                                                className="text-blue-600 text-sm font-semibold"
+                                                onClick={() =>
+                                                    setCaptchaCode(Math.random().toString(36).substring(2, 7).toUpperCase())
+                                                }
+                                            >
+                                                Refresh
+                                            </button>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={captcha}
+                                            onChange={(e) => setCaptcha(e.target.value)}
+                                            className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none tracking-[0.2em]"
+                                            placeholder="Enter CAPTCHA code"
+                                        />
+                                        {captchaError && <p className="text-xs text-rose-600">{captchaError}</p>}
                                     </div>
                                 </div>
 

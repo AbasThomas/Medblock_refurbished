@@ -115,7 +115,7 @@ const shortId = (value?: string) => {
                                 }`}
                         >
                             <item.icon
-                                size={24}
+                                size={20}
                                 className={`${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}
                             />
                             {(!isCollapsed || isMobile) && (

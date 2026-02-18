@@ -36,15 +36,18 @@ class ApiService {
         birth_date?: string
         telecom?: any[]
         address?: any[]
+        nin?: string
+        pin?: string
     }) {
         const response = await this.client.post('/identity/patient/create', data)
         return response.data
     }
 
-    async loginPatient(email: string, password: string) {
+    async loginPatient(email: string, credential: string, mode: 'password' | 'pin' = 'password') {
         const response = await this.client.post('/identity/patient/login', {
             email,
-            password,
+            credential,
+            mode,
         })
         return response.data
     }

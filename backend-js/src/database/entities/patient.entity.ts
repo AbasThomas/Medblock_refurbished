@@ -65,6 +65,12 @@ export class Patient {
   @Column({ length: 255, nullable: true, unique: true })
   walletAddress: string;
 
+  @Column({ length: 64, nullable: true })
+  nationalId: string;
+
+  @Column({ length: 255, nullable: true, select: false })
+  pinHash: string;
+
   @Column({ length: 255, nullable: true, select: false })
   passwordHash: string;
 

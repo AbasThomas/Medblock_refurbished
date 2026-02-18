@@ -322,6 +322,7 @@ export class IdentityController {
             console.log('DID created:', didResult.did);
 
             const passwordHash = await bcrypt.hash(createPatientDto.password, 10);
+            const pinHash = createPatientDto.pin ? await bcrypt.hash(createPatientDto.pin, 10) : undefined;
             const otherTelecom = (createPatientDto.telecom || []).filter(
                 (entry: any) => entry?.system !== 'email',
             );
@@ -335,6 +336,8 @@ export class IdentityController {
                 telecom: [{ system: 'email', value: createPatientDto.email }, ...otherTelecom],
                 address: createPatientDto.address || [],
                 walletAddress: createPatientDto.walletAddress,
+                nationalId: createPatientDto.nin,
+                pinHash,
                 passwordHash,
                 active: true,
             });
@@ -357,30 +360,47 @@ export class IdentityController {
     }
 
     @Post('patient/login')
-    @ApiOperation({ summary: 'Login Patient with Email and Password' })
+    @ApiOperation({ summary: 'Login Patient with Email and Credential' })
     @ApiResponse({ status: 200, description: 'Patient authenticated successfully' })
-    async loginPatient(@Body() body: { email: string; password: string }) {
+    async loginPatient(@Body() body: { email: string; credential: string; mode?: 'password' | 'pin' }) {
         const bcrypt = require('bcrypt');
 
         const patient = await this.patientRepository
             .createQueryBuilder('patient')
             .addSelect('patient.passwordHash')
+            .addSelect('patient.pinHash')
             .where(`patient.telecom::jsonb @> :telecom::jsonb`, {
                 telecom: JSON.stringify([{ system: 'email', value: body.email }])
             })
             .getOne();
 
         if (!patient) {
-            throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('Invalid email or credential', HttpStatus.UNAUTHORIZED);
         }
 
-        if (!patient.passwordHash) {
-            throw new HttpException('Password login is not set for this account', HttpStatus.UNAUTHORIZED);
-        }
+        const mode = body.mode || 'password';
+        const credential = body.credential;
 
-        const isPasswordValid = await bcrypt.compare(body.password, patient.passwordHash);
-        if (!isPasswordValid) {
-            throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
+        if (mode === 'password') {
+            if (!patient.passwordHash) {
+                throw new HttpException('Password login is not set for this account', HttpStatus.UNAUTHORIZED);
+            }
+
+            const isPasswordValid = await bcrypt.compare(credential, patient.passwordHash);
+            if (!isPasswordValid) {
+                throw new HttpException('Invalid email or credential', HttpStatus.UNAUTHORIZED);
+            }
+        } else if (mode === 'pin') {
+            if (!patient.pinHash) {
+                throw new HttpException('PIN login is not set for this account', HttpStatus.UNAUTHORIZED);
+            }
+
+            const isPinValid = await bcrypt.compare(credential, patient.pinHash);
+            if (!isPinValid) {
+                throw new HttpException('Invalid email or credential', HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            throw new HttpException('Unsupported authentication mode', HttpStatus.BAD_REQUEST);
         }
 
         return {

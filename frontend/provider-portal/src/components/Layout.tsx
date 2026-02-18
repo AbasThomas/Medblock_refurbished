@@ -60,7 +60,7 @@ export default function Layout() {
                     <footer className="bg-white border-t border-gray-200 py-6 print:hidden">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <p className="text-center text-sm text-gray-500">
-                                © 2025 MEDBLOCK. Powered by Cardano blockchain.
+                                © 2025 MEDBLOCK. Trusted care infrastructure for clinicians.
                             </p>
                         </div>
                     </footer>

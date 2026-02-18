@@ -55,8 +55,8 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
     ]
 
     const mixedPatientId = (() => {
-        const seed = `${patientId || ''}${did || ''}`.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
-        const fallback = '000221a'
+        const seed = `${patientId || ''}${did || ''}`.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
+        const fallback = '000221A'
         const suffix = (seed.slice(-7) || fallback).padStart(7, '0')
         return `Medblock:id ${suffix}`
     })()
@@ -118,7 +118,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                                 }`}
                         >
                             <item.icon
-                                size={24}
+                                size={20}
                                 className={`${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}
                             />
                             {(!isCollapsed || isMobile) && (
@@ -139,8 +139,8 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
             <div className="p-4 border-t border-gray-100 bg-gray-50/50">
                 {/* Wallet Status */}
                 {walletState.connected && (
-                    <div className={`flex items-center ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3 py-2 bg-green-50 rounded-lg border border-green-100'} mb-4`}>
-                        <Wallet size={24} className="text-green-600" />
+                        <div className={`flex items-center ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3 py-2 bg-green-50 rounded-lg border border-green-100'} mb-4`}>
+                            <Wallet size={18} className="text-green-600" />
                         {(!isCollapsed || isMobile) && (
                             <span className="ml-2 text-xs font-medium text-green-700 truncate">
                                 {walletState.balance}
@@ -165,7 +165,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                     className={`flex items-center w-full ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3'
                         } py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors`}
                 >
-                    <LogOut size={24} />
+                    <LogOut size={20} />
                     {(!isCollapsed || isMobile) && <span className="ml-3 text-sm font-medium">Logout</span>}
                 </button>
             </div>

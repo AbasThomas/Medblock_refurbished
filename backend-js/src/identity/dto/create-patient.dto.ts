@@ -48,6 +48,16 @@ export class CreatePatientDto {
   @IsOptional()
   address?: any[];
 
+  @ApiProperty({ example: '12345678901', required: false })
+  @IsString()
+  @IsOptional()
+  nin?: string;
+
+  @ApiProperty({ example: '12345', required: false })
+  @IsString()
+  @IsOptional()
+  pin?: string;
+
   @ApiProperty({ example: 'addr_test1...', required: false })
   @IsString()
   @IsOptional()
