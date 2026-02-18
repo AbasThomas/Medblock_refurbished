@@ -118,7 +118,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                                 }`}
                         >
                             <item.icon
-                                size={34}
+                                size={24}
                                 className={`${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}
                             />
                             {(!isCollapsed || isMobile) && (
