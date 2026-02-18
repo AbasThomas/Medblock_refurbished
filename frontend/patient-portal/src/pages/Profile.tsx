@@ -22,6 +22,7 @@ import { useAuth } from '../hooks/useAuth'
 import { apiService } from '../services/api'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { formatPatientId } from '../utils/formatId'
 
 export default function Profile() {
     const { logout, did } = useAuth()
@@ -223,7 +224,7 @@ export default function Profile() {
                                             </span>
                                             <span className="hidden md:inline">•</span>
                                             <span className="font-mono bg-gray-100 px-2 py-0.5 rounded text-xs flex items-center gap-2 cursor-pointer hover:bg-gray-200 transition-colors" onClick={copyDid}>
-                                                {profile?.did ? `${profile.did.substring(0, 20)}...` : ''}
+                                                {formatPatientId(profile?.did)}
                                                 <Copy size={12} />
                                             </span>
                                         </div>

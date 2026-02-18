@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Key, AlertTriangle, Shield, Search, Download } from 'lucide-react';
+import { Users, Key, AlertTriangle, Shield } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import DataTable from '../components/DataTable';
-import StatusBadge from '../components/StatusBadge';
 import FilterPanel from '../components/FilterPanel';
 import ExportButton from '../components/ExportButton';
+import { adminService } from '../services/api';
 
 const Patients = () => {
   const [patients, setPatients] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   // const [setAdminService, setAdmin] = useState(adminService);
   useEffect(() => {

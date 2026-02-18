@@ -234,7 +234,7 @@ export default function Register() {
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="md:w-1/3 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/60 shadow-xl p-8 flex flex-col"
+                    className="md:w-1/3 bg-white rounded-3xl border border-gray-200 shadow-xl p-8 flex flex-col"
                 >
                     <div className="mb-8">
                         <img src={logo} alt="MEDBLOCK" className="w-16 h-16 object-contain mb-4" />
@@ -255,8 +255,8 @@ export default function Register() {
                                     )}
 
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-colors duration-300 ${isActive ? 'border-blue-600 bg-blue-50 text-blue-600' :
-                                            isCompleted ? 'border-blue-600 bg-blue-600 text-white' :
-                                                'border-slate-200 text-slate-400'
+                                        isCompleted ? 'border-blue-600 bg-blue-600 text-white' :
+                                            'border-slate-200 text-slate-400'
                                         }`}>
                                         {isCompleted ? <CheckCircle2 size={16} /> : <span className="text-xs font-bold">{index + 1}</span>}
                                     </div>
@@ -284,7 +284,7 @@ export default function Register() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="md:w-2/3 bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-xl p-8 md:p-10 flex flex-col relative overflow-hidden"
+                    className="md:w-2/3 bg-white rounded-3xl border border-gray-200 shadow-xl p-8 md:p-10 flex flex-col relative overflow-hidden"
                 >
                     {error && (
                         <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl text-red-700 flex items-center gap-3 text-sm animate-fade-in">
@@ -580,9 +580,7 @@ export default function Register() {
                         </div>
                     </form>
 
-                    <div className="absolute top-0 right-0 p-8 pointer-events-none opacity-20">
-                        <div className="w-64 h-64 bg-blue-400 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                    </div>
+
                 </motion.div>
             </div>
         </div>

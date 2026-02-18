@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import logo from '../../../shared/logo.png'
+import { formatPatientId, getRawDid } from '../utils/formatId'
 
 interface SidebarProps {
     isCollapsed: boolean
@@ -26,7 +27,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, onMobileClose }: SidebarProps) {
     const { pathname } = useLocation()
-    const { logout, did, patientId } = useAuth()
+    const { logout, did } = useAuth()
     const { walletState, disconnect } = useCardanoWallet()
     const navigate = useNavigate()
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -54,26 +55,23 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
         { name: 'Profile', href: '/profile', icon: User },
     ]
 
-    const mixedPatientId = (() => {
-        const seed = `${patientId || ''}${did || ''}`.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
-        const fallback = '000221A'
-        const suffix = (seed.slice(-7) || fallback).padStart(7, '0')
-        return `Medblock:id ${suffix}`
-    })()
+
+
+    const mixedPatientId = formatPatientId(did)
 
     const sidebarContent = (
         <div className="flex flex-col h-full">
             {/* Header */}
             <div className="h-20 flex items-center justify-between px-4 border-b border-gray-100">
                 <div className="flex items-center overflow-hidden">
-                    <div 
+                    <div
                         className="flex items-center cursor-pointer min-w-max"
                         onClick={() => navigate('/dashboard')}
                     >
                         <div className="p-1.5 bg-blue-50 rounded-xl mr-3 shadow-sm border border-blue-100/50">
                             <img src={logo} alt="MEDBLOCK" className="h-8 w-8 object-contain" />
                         </div>
-                        
+
                         {(!isCollapsed || isMobile) && (
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
@@ -139,8 +137,8 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
             <div className="p-4 border-t border-gray-100 bg-gray-50/50">
                 {/* Wallet Status */}
                 {walletState.connected && (
-                        <div className={`flex items-center ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3 py-2 bg-green-50 rounded-lg border border-green-100'} mb-4`}>
-                            <Wallet size={18} className="text-green-600" />
+                    <div className={`flex items-center ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3 py-2 bg-green-50 rounded-lg border border-green-100'} mb-4`}>
+                        <Wallet size={18} className="text-green-600" />
                         {(!isCollapsed || isMobile) && (
                             <span className="ml-2 text-xs font-medium text-green-700 truncate">
                                 {walletState.balance}
@@ -153,7 +151,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                 {(!isCollapsed || isMobile) && (
                     <div className="mb-4 px-2">
                         <p className="text-xs font-medium text-gray-500 uppercase">Patient ID</p>
-                        <p className="text-xs text-gray-900 truncate font-mono mt-1" title={mixedPatientId}>
+                        <p className="text-xs text-gray-900 truncate font-mono mt-1" title={getRawDid(did)}>
                             {mixedPatientId}
                         </p>
                     </div>
@@ -181,7 +179,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                 className="hidden md:flex h-screen bg-white border-r border-gray-200 fixed left-0 top-0 z-50 flex-col shadow-lg"
             >
                 {sidebarContent}
-                
+
                 {/* Desktop Toggle Button - Centered on border */}
                 <button
                     onClick={onToggle}

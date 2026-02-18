@@ -28,15 +28,10 @@ import {
 } from '../components/DashboardComponents'
 import favicon from '../../../shared/logo.png'
 
-const formatMixedPatientId = (patientId?: string | null, did?: string | null) => {
-    const seed = `${patientId || ''}${did || ''}`.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
-    const fallback = '221A'
-    const suffix = (seed.slice(-4) || fallback).padStart(4, '0')
-    return `Medblock:${suffix}`
-}
+import { formatPatientId, getRawDid } from '../utils/formatId'
 
 export default function Dashboard() {
-    const { did, patientId, profile } = useAuth()
+    const { did, profile } = useAuth()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
@@ -115,7 +110,7 @@ export default function Dashboard() {
     const handleRefreshData = () => {
         refetchObservations()
         refetchConsents()
-        
+
         Swal.fire({
             icon: 'success',
             title: 'Data Refreshed',
@@ -204,7 +199,7 @@ export default function Dashboard() {
     // Calculate real statistics
     const observationList = Array.isArray(observations) ? observations : (observations?.results || []);
     const consentList = Array.isArray(consents) ? consents : (consents?.results || []);
-    const mixedPatientId = formatMixedPatientId(patientId, did)
+
 
     const stats = [
         {
@@ -231,27 +226,27 @@ export default function Dashboard() {
     ]
 
     const quickActions = [
-        { 
-            name: 'Grant Access', 
-            icon: Shield, 
+        {
+            name: 'Grant Access',
+            icon: Shield,
             color: 'from-emerald-500 to-emerald-600',
             action: handleGrantConsent
         },
-        { 
-            name: 'Verify Hash', 
-            icon: CheckCircle, 
+        {
+            name: 'Verify Hash',
+            icon: CheckCircle,
             color: 'from-blue-500 to-blue-600',
             action: handleVerifyHash
         },
-        { 
-            name: 'Export Data', 
-            icon: Download, 
+        {
+            name: 'Export Data',
+            icon: Download,
             color: 'from-purple-500 to-purple-600',
             action: handleExportData
         },
-        { 
-            name: 'Share Records', 
-            icon: Share2, 
+        {
+            name: 'Share Records',
+            icon: Share2,
             color: 'from-pink-500 to-pink-600',
             action: handleShareData
         }
@@ -317,7 +312,7 @@ export default function Dashboard() {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
                         >
-                            Your health data ID is {mixedPatientId}
+                            Your health data ID is <span title={getRawDid(did)} className="cursor-help border-b border-dashed border-slate-400">{formatPatientId(did)}</span>
                         </motion.p>
                     </div>
                     <motion.button
@@ -554,7 +549,7 @@ export default function Dashboard() {
                 <div className="flex-1">
                     <h3 className="font-bold text-gray-900 mb-2">Real-Time Data Sync</h3>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                        Your dashboard automatically refreshes every 30 seconds to show the latest data. 
+                        Your dashboard automatically refreshes every 30 seconds to show the latest data.
                         All changes are immediately reflected and secured on the Cardano blockchain.
                     </p>
                 </div>

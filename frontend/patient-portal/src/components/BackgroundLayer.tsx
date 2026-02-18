@@ -67,8 +67,6 @@ const BackgroundLayer: React.FC = () => {
                 style={{
                     height: `${height}px`,
                     backgroundColor: '#f8fafc',
-                    maskImage: 'radial-gradient(ellipse at top, black 34%, transparent 72%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse at top, black 34%, transparent 72%)',
                 }}
             />
 
@@ -79,8 +77,7 @@ const BackgroundLayer: React.FC = () => {
                 viewBox={`0 0 ${width} ${height}`}
                 preserveAspectRatio="none"
                 style={{
-                    maskImage: 'radial-gradient(ellipse at top, black 40%, transparent 76%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse at top, black 40%, transparent 76%)',
+                    opacity: 0.6
                 }}
             >
                 {verticalLines.map((x, idx) => (
