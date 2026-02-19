@@ -43,34 +43,34 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
         navigate('/login')
     }
 
-const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'My Patients', href: '/my-patients', icon: Users },
-    { name: 'Patient Search', href: '/patients/search', icon: Search },
-    { name: 'Interoperability', href: '/interoperability', icon: Share2 },
-    { name: 'Audit Logs', href: '/audit-logs', icon: Activity },
-    { name: 'Profile', href: '/profile', icon: User },
-]
+    const navigation = [
+        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        { name: 'My Patients', href: '/my-patients', icon: Users },
+        { name: 'Patient Search', href: '/patients/search', icon: Search },
+        { name: 'Interoperability', href: '/interoperability', icon: Share2 },
+        { name: 'Audit Logs', href: '/audit-logs', icon: Activity },
+        { name: 'Profile', href: '/profile', icon: User },
+    ]
 
-const shortId = (value?: string) => {
-    if (!value) return 'Medblock:0000'
-    const raw = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase()
-    return `Medblock:${raw.slice(-4).padStart(4, '0')}`
-}
+    const shortId = (value?: string) => {
+        if (!value) return 'Medblock:0000'
+        const raw = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase()
+        return `Medblock:${raw.slice(-4).padStart(4, '0')}`
+    }
 
     const sidebarContent = (
         <div className="flex flex-col h-full">
             {/* Header */}
             <div className="h-20 flex items-center justify-between px-4 border-b border-gray-100">
                 <div className="flex items-center overflow-hidden">
-                    <div 
+                    <div
                         className="flex items-center cursor-pointer min-w-max"
                         onClick={() => navigate('/dashboard')}
                     >
                         <div className="p-1.5 bg-blue-50 rounded-xl mr-3 shadow-sm border border-blue-100/50">
                             <img src={logo} alt="MEDBLOCK" className="h-8 w-8 object-contain" />
                         </div>
-                        
+
                         {(!isCollapsed || isMobile) && (
                             <motion.div
                                 initial={{ opacity: 0, x: -10 }}
@@ -82,7 +82,7 @@ const shortId = (value?: string) => {
                                 <h1 className="text-lg font-bold text-[#20305B] leading-none">
                                     MEDBLOCK
                                 </h1>
-                                <span className="text-[10px] text-blue-600 font-bold tracking-tight mt-0.5">
+                                <span className="text-xs text-blue-600 font-bold tracking-tight mt-0.5">
                                     PROVIDER PORTAL
                                 </span>
                             </motion.div>
@@ -135,17 +135,17 @@ const shortId = (value?: string) => {
             {/* Footer / User */}
             <div className="p-4 border-t border-gray-100 bg-gray-50/50">
                 {/* User Info */}
-                        {(!isCollapsed || isMobile) && (
-                            <div className="mb-4 px-2">
-                                <p className="text-xs font-medium text-gray-500 uppercase">Logged in as</p>
-                                <p className="text-sm font-semibold text-gray-900 truncate mt-1">
-                                    {providerName || 'Provider'}
-                                </p>
-                                <p className="text-xs text-gray-500 truncate font-mono" title={providerDID || ''}>
-                                    {shortId(providerDID)}
-                                </p>
-                            </div>
-                        )}
+                {(!isCollapsed || isMobile) && (
+                    <div className="mb-4 px-2">
+                        <p className="text-xs font-medium text-gray-500 uppercase">Logged in as</p>
+                        <p className="text-sm font-semibold text-gray-900 truncate mt-1">
+                            {providerName || 'Provider'}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate font-mono" title={providerDID || ''}>
+                            {shortId(providerDID)}
+                        </p>
+                    </div>
+                )}
 
                 {/* Logout */}
                 <button

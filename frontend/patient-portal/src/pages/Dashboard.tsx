@@ -7,20 +7,24 @@ import { format } from 'date-fns'
 import { motion } from 'framer-motion'
 import Swal from 'sweetalert2'
 import {
-    FileText,
-    Shield,
-    Clock,
-    Activity,
-    Zap,
-    CheckCircle,
-    AlertTriangle,
-    ChevronRight,
-    Plus,
-    RefreshCw,
-    Users,
-    Download,
-    Share2
-} from 'lucide-react'
+    DashboardSquare01Icon,
+    UserIcon,
+    Notification01Icon,
+    CreditCardIcon,
+    File01Icon,
+    Shield01Icon,
+    Logout01Icon,
+    MoreHorizontalIcon,
+    AlertCircleIcon,
+} from 'hugeicons-react'
+import {
+    Add01Icon,
+    Tick01Icon,
+    ArrowRight01Icon,
+    FlashIcon,
+    Refresh01Icon,
+    Activity01Icon,
+} from 'hugeicons-react'
 import {
     StatCard,
     RecordItem,
@@ -205,21 +209,21 @@ export default function Dashboard() {
         {
             name: 'Total Records',
             value: observationList.length,
-            icon: FileText,
+            icon: File01Icon,
             color: 'bg-blue-500',
             trend: observationList.length > 0 ? `${observationList.length} records` : 'No records yet'
         },
         {
             name: 'Active Consents',
             value: consentList.length,
-            icon: Shield,
+            icon: Shield01Icon,
             color: 'bg-emerald-500',
             trend: consentList.length > 0 ? 'Access granted' : 'No active consents'
         },
         {
             name: 'Last Updated',
             value: observationList.length > 0 ? format(new Date(observationList[0].effectiveDatetime || observationList[0].issued), 'MMM d') : 'N/A',
-            icon: Clock,
+            icon: DashboardSquare01Icon,
             color: 'bg-amber-500',
             trend: 'Real-time sync'
         },
@@ -228,29 +232,29 @@ export default function Dashboard() {
     const quickActions = [
         {
             name: 'Grant Access',
-            icon: Shield,
-            color: 'from-emerald-500 to-emerald-600',
+            icon: Add01Icon,
+            color: 'bg-emerald-500',
             action: handleGrantConsent
         },
         {
             name: 'Verify Hash',
-            icon: CheckCircle,
-            color: 'from-blue-500 to-blue-600',
+            icon: FlashIcon,
+            color: 'bg-blue-600',
             action: handleVerifyHash
         },
         {
-            name: 'Export Data',
-            icon: Download,
-            color: 'from-purple-500 to-purple-600',
-            action: handleExportData
+            name: 'Refresh Data',
+            icon: Refresh01Icon,
+            color: 'bg-slate-700',
+            action: handleRefreshData
         },
         {
-            name: 'Share Records',
-            icon: Share2,
-            color: 'from-pink-500 to-pink-600',
-            action: handleShareData
+            name: 'Export Data',
+            icon: ArrowRight01Icon,
+            color: 'bg-indigo-600',
+            action: handleExportData
         }
-    ]
+    ];
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -294,12 +298,12 @@ export default function Dashboard() {
             {/* Welcome Banner */}
             <motion.div
                 variants={itemVariants}
-                className="relative border border-slate-200 bg-white/95 p-6 md:p-8 text-slate-900 shadow-xl"
+                className="relative border border-slate-200 bg-white p-6 md:p-8 text-slate-900 shadow-sm rounded-3xl"
             >
                 <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
                     <div>
                         <motion.h1
-                            className="text-2xl md:text-3xl font-bold"
+                            className="text-2xl md:text-3xl font-bold tracking-tight"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
@@ -312,7 +316,7 @@ export default function Dashboard() {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
                         >
-                            Your health data ID is <span title={getRawDid(did)} className="cursor-help border-b border-dashed border-slate-400">{formatPatientId(did)}</span>
+                            Your health data ID is <span title={getRawDid(did)} className="cursor-help border-b border-dashed border-slate-400">{formatPatientId(did, true)}</span>
                         </motion.p>
                     </div>
                     <motion.button
@@ -321,7 +325,7 @@ export default function Dashboard() {
                         whileTap={{ scale: 0.97 }}
                         className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition"
                     >
-                        <RefreshCw size={18} />
+                        <Refresh01Icon size={18} />
                         <span>Refresh</span>
                     </motion.button>
                 </div>
@@ -337,7 +341,7 @@ export default function Dashboard() {
             {/* Quick Actions */}
             <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Zap className="text-blue-600" size={32} />
+                    <FlashIcon className="text-blue-600" size={32} />
                     Quick Actions
                 </h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -345,15 +349,15 @@ export default function Dashboard() {
                         <motion.button
                             key={action.name}
                             onClick={action.action}
-                            whileHover={{ scale: 1.03, y: -1 }}
+                            whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className={`flex flex-col items-center justify-center p-4 rounded-xl ${action.color.replace('from-', 'bg-').replace(' to-', '-600 hover:bg-')} text-white shadow-sm hover:shadow-md transition-all duration-300`}
+                            className={`flex flex-col items-center justify-center p-6 rounded-2xl ${action.color} text-white shadow-sm transition-all duration-200`}
                         >
-                            <action.icon size={32} className="mb-2" />
-                            <span className="text-sm font-medium text-center">{action.name}</span>
+                            <action.icon size={28} className="mb-3" />
+                            <span className="text-sm font-semibold tracking-wide text-center">{action.name}</span>
                         </motion.button>
                     ))}
                 </div>
@@ -368,7 +372,7 @@ export default function Dashboard() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 sm:gap-0">
                         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                             <div className="p-2 bg-blue-100 rounded-lg">
-                                <FileText className="w-7 h-7 text-blue-600" />
+                                <File01Icon className="w-7 h-7 text-blue-600" />
                             </div>
                             Recent Medical Records
                         </h2>
@@ -377,7 +381,7 @@ export default function Dashboard() {
                             className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center group"
                         >
                             View All
-                            <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                            <ArrowRight01Icon className="w-5 h-5 ml-1 group-hover:translate-x-0.5 transition-transform" />
                         </button>
                     </div>
 
@@ -396,14 +400,14 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         <div className="text-center py-12">
-                            <FileText className="w-20 h-20 text-gray-300 mx-auto mb-4" />
+                            <File01Icon className="w-20 h-20 text-gray-300 mx-auto mb-4" />
                             <p className="text-gray-500 font-medium mb-2">No medical records yet</p>
                             <p className="text-gray-500 text-sm mb-4">Your medical records will appear here</p>
                             <button
                                 onClick={() => navigate('/records')}
                                 className="px-4 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all inline-flex items-center gap-2"
                             >
-                                <Plus size={20} />
+                                <Add01Icon size={20} />
                                 Add Record
                             </button>
                         </div>
@@ -418,7 +422,7 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                             <div className="p-2 bg-emerald-100 rounded-lg">
-                                <Shield className="w-7 h-7 text-emerald-600" />
+                                <Shield01Icon className="w-7 h-7 text-emerald-600" />
                             </div>
                             Active Consents
                         </h2>
@@ -450,15 +454,14 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         <div className="text-center py-12">
-                            <Shield className="w-20 h-20 text-gray-300 mx-auto mb-4" />
-                            <p className="text-gray-500 font-medium mb-2">No active consents</p>
-                            <p className="text-gray-500 text-sm mb-4">Grant access to healthcare providers</p>
+                            <Shield01Icon className="w-20 h-20 text-gray-300 mx-auto mb-4" />
+                            <p className="text-sm font-bold text-slate-900">No active consents</p>
+                            <p className="text-xs text-slate-500 mt-1">You haven't granted medical access to any providers yet.</p>
                             <button
                                 onClick={handleGrantConsent}
-                                className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-all inline-flex items-center gap-2"
+                                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors"
                             >
-                                <Plus size={20} />
-                                Grant Access
+                                <Add01Icon size={16} /> Grant Your First Access
                             </button>
                         </div>
                     )}
@@ -471,28 +474,28 @@ export default function Dashboard() {
                 <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-3 mb-6">
                         <div className="bg-green-100 p-2 rounded-xl">
-                            <Shield className="w-5 h-5 text-green-600" />
+                            <Shield01Icon className="w-5 h-5 text-green-600" />
                         </div>
                         <h3 className="font-bold text-gray-900 text-lg">Security Status</h3>
                     </div>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100">
                             <span className="text-sm text-gray-700 font-medium">Blockchain Secured</span>
-                            <CheckCircle className="w-6 h-6 text-green-600" />
+                            <Tick01Icon className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100">
                             <span className="text-sm text-gray-700 font-medium">DID Verified</span>
-                            <CheckCircle className="w-6 h-6 text-green-600" />
+                            <Tick01Icon className="w-6 h-6 text-green-600" />
                         </div>
                         <div className="flex items-center justify-between p-3 bg-blue-50 rounded-xl border border-blue-100">
                             <span className="text-sm text-gray-700 font-medium">Wallet Connected</span>
-                            <CheckCircle className="w-6 h-6 text-blue-600" />
+                            <Tick01Icon className="w-6 h-6 text-blue-600" />
                         </div>
                         <button
                             onClick={handleVerifyHash}
                             className="w-full px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                         >
-                            <CheckCircle size={24} />
+                            <Tick01Icon size={24} />
                             Verify Blockchain Hash
                         </button>
                     </div>
@@ -502,7 +505,7 @@ export default function Dashboard() {
                 <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-3 mb-6">
                         <div className="bg-purple-100 p-2 rounded-xl">
-                            <Activity className="w-5 h-5 text-purple-600" />
+                            <Activity01Icon size={20} className="text-purple-600" />
                         </div>
                         <h3 className="font-bold text-gray-900 text-lg">Activity Summary</h3>
                     </div>
@@ -510,7 +513,7 @@ export default function Dashboard() {
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-100 rounded-lg">
-                                    <FileText size={20} className="text-blue-600" />
+                                    <File01Icon size={20} className="text-blue-600" />
                                 </div>
                                 <span className="text-sm text-gray-700 font-medium">Total Records</span>
                             </div>
@@ -518,8 +521,8 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-emerald-100 rounded-lg">
-                                    <Shield size={20} className="text-emerald-600" />
+                                <div className="p-3 rounded-2xl bg-emerald-50 text-emerald-600">
+                                    <Shield01Icon size={24} />
                                 </div>
                                 <span className="text-sm text-gray-700 font-medium">Active Consents</span>
                             </div>
@@ -528,7 +531,7 @@ export default function Dashboard() {
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-purple-100 rounded-lg">
-                                    <Users size={20} className="text-purple-600" />
+                                    <UserIcon size={20} className="text-purple-600" />
                                 </div>
                                 <span className="text-sm text-gray-700 font-medium">Providers</span>
                             </div>
@@ -541,10 +544,10 @@ export default function Dashboard() {
             {/* Info Banner */}
             <motion.div
                 variants={itemVariants}
-                className="bg-blue-50 border border-blue-200 rounded-2xl p-6 flex items-start gap-4"
+                className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4"
             >
                 <div className="p-3 bg-blue-100 rounded-xl flex-shrink-0">
-                    <AlertTriangle className="w-8 h-8 text-blue-600" />
+                    <AlertCircleIcon className="w-8 h-8 text-blue-600" />
                 </div>
                 <div className="flex-1">
                     <h3 className="font-bold text-gray-900 mb-2">Real-Time Data Sync</h3>

@@ -165,10 +165,12 @@ const LandingPage: React.FC = () => {
                     <div className="grid gap-6 md:grid-cols-2">
                         {frictionStats.map((stat, index) => (
                             <FadeInSection key={stat.title} delay={index * 90}>
-                                <div className="relative space-y-2 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-lg shadow-slate-900/5">
-                                    <stat.icon size={28} className="text-blue-600" />
-                                    <h3 className="text-lg font-semibold text-slate-900">{stat.title}</h3>
-                                    <p className="text-sm text-slate-500">{stat.desc}</p>
+                                <div className="relative space-y-3 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                                    <div className="inline-flex p-3 rounded-2xl bg-blue-50 text-blue-600">
+                                        <stat.icon size={24} />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">{stat.title}</h3>
+                                    <p className="text-slate-500 leading-relaxed font-medium">{stat.desc}</p>
                                 </div>
                             </FadeInSection>
                         ))}
@@ -194,18 +196,20 @@ const LandingPage: React.FC = () => {
                     <div className="grid gap-6 md:grid-cols-3">
                         {stakeholderFeatures.map((stakeholder, idx) => (
                             <FadeInSection key={stakeholder.title} delay={idx * 80}>
-                                <div className="h-full space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6">
-                                    <div className="flex items-center gap-3 text-white">
-                                        <div className="rounded-2xl bg-white/10 p-3 text-blue-200">
-                                            <stakeholder.icon size={24} />
+                                <div className="h-full space-y-6 rounded-[2rem] border border-white/10 bg-white/5 p-8 hover:bg-white/[0.08] transition-all duration-300">
+                                    <div className="flex items-center gap-4 text-white">
+                                        <div className="rounded-2xl bg-blue-600 p-4 text-white shadow-lg shadow-blue-600/20">
+                                            <stakeholder.icon size={28} />
                                         </div>
-                                        <h3 className="text-xl font-semibold">{stakeholder.title}</h3>
+                                        <h3 className="text-2xl font-bold tracking-tight">{stakeholder.title}</h3>
                                     </div>
-                                    <ul className="space-y-2 text-sm text-white/70">
+                                    <ul className="space-y-4">
                                         {stakeholder.benefits.map((benefit) => (
-                                            <li key={benefit} className="flex items-start gap-2">
-                                                <CheckCircle size={16} className="mt-1 text-emerald-400" />
-                                                <span>{benefit}</span>
+                                            <li key={benefit} className="flex items-start gap-3">
+                                                <div className="mt-1 flex-shrink-0">
+                                                    <CheckCircle size={18} className="text-emerald-500" />
+                                                </div>
+                                                <span className="text-slate-300 font-medium leading-relaxed">{benefit}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -231,14 +235,14 @@ const LandingPage: React.FC = () => {
                     <div className="grid gap-6 md:grid-cols-2">
                         {useCases.map((item, index) => (
                             <FadeInSection key={item.title} delay={index * 80}>
-                                <div className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-lg shadow-slate-900/5">
-                                    <div className="mb-4 flex items-center gap-3 text-blue-600">
-                                        <div className="rounded-2xl bg-blue-50 p-3">
-                                            <item.icon size={26} />
+                                <div className="rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm hover:shadow-md transition-all duration-300">
+                                    <div className="mb-6 flex items-center gap-4 text-blue-600">
+                                        <div className="rounded-2xl bg-blue-600/10 p-4">
+                                            <item.icon size={28} />
                                         </div>
-                                        <h3 className="text-xl font-semibold text-slate-900">{item.title}</h3>
+                                        <h3 className="text-2xl font-bold text-slate-900 tracking-tight">{item.title}</h3>
                                     </div>
-                                    <p className="text-sm text-slate-600">{item.desc}</p>
+                                    <p className="text-slate-500 font-medium leading-relaxed">{item.desc}</p>
                                 </div>
                             </FadeInSection>
                         ))}

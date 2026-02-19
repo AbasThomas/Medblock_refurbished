@@ -4,16 +4,15 @@ import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import Swal from 'sweetalert2'
 import {
-    FileText,
-    Shield,
-    AlertCircle,
-    CheckCircle,
-    Clock,
-
-    ChevronRight,
-    Eye,
-    Calendar
-} from 'lucide-react'
+    File01Icon,
+    Shield01Icon,
+    AlertCircleIcon,
+    Tick01Icon,
+    Clock01Icon,
+    ArrowRight01Icon,
+    ViewIcon,
+    Calendar01Icon,
+} from 'hugeicons-react'
 
 // Types
 interface StatCardProps {
@@ -72,29 +71,25 @@ export const StatCard: React.FC<StatCardProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
             whileHover={{
-                scale: 1.02,
-                y: -2,
+                y: -4,
                 transition: { type: "spring", stiffness: 400 }
             }}
-            className="bg-white/80 backdrop-blur-sm p-5 md:p-6 rounded-2xl shadow-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 group"
+            className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:border-slate-200 transition-all duration-300 group"
         >
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-sm font-medium text-gray-500 mb-1">{name}</p>
-                    <p className="text-2xl font-bold text-gray-900">{value}</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{name}</p>
+                    <p className="text-3xl font-extrabold text-slate-900">{value}</p>
                     {trend && (
-                        <p className="text-xs text-gray-400 mt-1 flex items-center">
-                            <span className="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
+                        <p className="text-xs text-slate-500 mt-2 flex items-center font-medium">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2"></span>
                             {trend}
                         </p>
                     )}
                 </div>
-                <motion.div
-                    className={`${color} p-4 rounded-xl bg-opacity-10 group-hover:scale-110 transition-transform duration-200`}
-                    whileHover={{ rotate: 5 }}
-                >
-                    <Icon size={32} className={color.replace('bg-', 'text-')} />
-                </motion.div>
+                <div className={`${color} p-4 rounded-2xl bg-opacity-10 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon size={28} className={color.replace('bg-', 'text-')} />
+                </div>
             </div>
         </motion.div>
     )
@@ -110,16 +105,16 @@ export const RecordItem: React.FC<RecordItemProps> = ({ record, delay = 0 }) => 
                 x: 4,
                 transition: { type: "spring", stiffness: 400 }
             }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-gray-200 transition-all duration-200 cursor-pointer shadow-sm group gap-3 sm:gap-0"
+            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all duration-200 cursor-pointer shadow-sm group gap-3 sm:gap-0"
         >
             <div className="flex items-center space-x-4">
-                <div className="bg-blue-50 p-2.5 rounded-lg text-blue-600 group-hover:bg-blue-100 transition-colors duration-200">
-                    <FileText size={28} />
+                <div className="bg-gray-100 p-3 rounded-xl group-hover:bg-gray-200 transition-colors duration-200">
+                    <Clock01Icon size={22} className="text-gray-600" />
                 </div>
                 <div>
-                    <p className="font-medium text-gray-900">{record.code?.text || 'Medical Record'}</p>
-                    <p className="text-xs text-gray-500 flex items-center mt-1">
-                        <Calendar size={12} className="mr-1" />
+                    <p className="font-bold text-slate-900">{record.code?.text || 'Medical Record'}</p>
+                    <p className="text-xs text-slate-500 flex items-center mt-1 font-medium">
+                        <Calendar01Icon size={12} className="mr-1" />
                         {(() => {
                             const dateVal = record.effectiveDatetime || record.effective_datetime || record.issued || new Date();
                             try {
@@ -131,14 +126,14 @@ export const RecordItem: React.FC<RecordItemProps> = ({ record, delay = 0 }) => 
                     </p>
                 </div>
             </div>
-            <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-2 pl-14 sm:pl-0">
+            <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-2 pl-12 sm:pl-0">
                 {record.status === 'final' && (
-                    <span className="flex items-center px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100">
-                        <CheckCircle size={12} className="mr-1" />
+                    <span className="flex items-center px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100">
+                        <Tick01Icon size={10} className="mr-1" />
                         Verified
                     </span>
                 )}
-                    <ChevronRight size={20} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-200" />
+                <ArrowRight01Icon size={20} className="text-slate-300 group-hover:text-slate-600 transition-colors duration-200" />
             </div>
         </motion.div>
     )
@@ -154,8 +149,8 @@ export const ConsentItem: React.FC<ConsentItemProps> = ({ consent, onRevoke, del
             confirmButtonColor: '#ef4444',
             cancelButtonColor: '#6b7280',
             confirmButtonText: 'Yes, revoke it!',
-            background: '#0f172a',
-            color: 'white'
+            background: '#ffffff',
+            color: '#0f172a'
         }).then((result) => {
             if (result.isConfirmed) {
                 onRevoke(consent.id)
@@ -164,8 +159,8 @@ export const ConsentItem: React.FC<ConsentItemProps> = ({ consent, onRevoke, del
                     text: 'Access has been revoked.',
                     icon: 'success',
                     confirmButtonColor: '#3b82f6',
-                    background: '#0f172a',
-                    color: 'white'
+                    background: '#ffffff',
+                    color: '#0f172a'
                 })
             }
         })
@@ -176,18 +171,18 @@ export const ConsentItem: React.FC<ConsentItemProps> = ({ consent, onRevoke, del
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 group gap-3 sm:gap-0"
+            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 group gap-3 sm:gap-0"
         >
             <div className="flex items-center space-x-3">
-                <div className="bg-emerald-50 p-2 rounded-full text-emerald-600 group-hover:bg-emerald-100 transition-colors duration-200">
-                    <Shield size={26} />
+                <div className="bg-emerald-50 p-3 rounded-xl text-emerald-600 group-hover:bg-emerald-100 transition-colors duration-200">
+                    <Shield01Icon size={24} />
                 </div>
                 <div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="font-bold text-slate-900">
                         {getProviderName(consent.provider) || (consent.provider_did ? `${consent.provider_did.substring(0, 15)}...` : 'Unknown Provider')}
                     </p>
-                    <p className="text-xs text-gray-500 flex items-center mt-1">
-                        <Clock size={12} className="mr-1" />
+                    <p className="text-xs text-slate-500 flex items-center mt-1 font-medium">
+                        <Clock01Icon size={12} className="mr-1" />
                         Expires: {(() => {
                             const dateVal = consent.expiresAt || consent.expires_at;
                             try {
@@ -203,9 +198,9 @@ export const ConsentItem: React.FC<ConsentItemProps> = ({ consent, onRevoke, del
                 onClick={handleRevoke}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="text-xs text-rose-600 hover:text-rose-700 font-medium px-3 py-1.5 hover:bg-rose-50 rounded-lg transition-all duration-200 border border-transparent hover:border-rose-100 w-full sm:w-auto text-center sm:text-left ml-11 sm:ml-0"
+                className="text-xs text-rose-600 hover:text-rose-700 font-bold px-4 py-2 hover:bg-rose-50 rounded-xl transition-all duration-200 border border-transparent hover:border-rose-100 w-full sm:w-auto text-center"
             >
-                Revoke
+                Revoke Access
             </motion.button>
         </motion.div>
     )
@@ -225,12 +220,12 @@ export const AuditItem: React.FC<AuditItemProps> = ({ log, delay = 0 }) => {
                     {log.actor} <span className="font-normal text-gray-500">{log.action}</span>
                 </p>
                 <p className="text-xs text-gray-400 flex items-center mt-1">
-                    <Eye size={12} className="mr-1" />
+                    <ViewIcon size={12} className="mr-1" /> {/* Corrected from Eye */}
                     {log.timestamp} • {log.location}
                 </p>
                 {log.verified && (
-                    <span className="inline-flex items-center mt-1 text-[10px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
-                        <CheckCircle size={10} className="mr-1" /> Immutable
+                    <span className="inline-flex items-center mt-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100">
+                        <Tick01Icon size={10} className="mr-1" /> {/* Corrected from CheckCircle */} Immutable
                     </span>
                 )}
             </div>
@@ -243,12 +238,12 @@ export const SecurityWidget: React.FC<{ status: any }> = ({ status }) => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl p-5 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300"
+            whileHover={{ y: -2 }}
+            className="bg-slate-900 text-white rounded-3xl p-6 shadow-xl border border-slate-800 transition-all duration-300"
         >
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center space-x-2">
-                    <Shield className="w-5 h-5 text-blue-400" />
+                    <Shield01Icon className="w-5 h-5 text-blue-400" /> {/* Corrected from Shield */}
                     <h3 className="font-bold text-lg">Security</h3>
                 </div>
                 <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${status.securityScore > 80 ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-black'}`}>
@@ -260,7 +255,7 @@ export const SecurityWidget: React.FC<{ status: any }> = ({ status }) => {
                 <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-300">Private Key Backup</span>
                     <span className={`flex items-center ${status.backupStatus ? "text-emerald-400" : "text-rose-400"}`}>
-                        {status.backupStatus ? <CheckCircle size={14} className="mr-1" /> : <AlertCircle size={14} className="mr-1" />}
+                        {status.backupStatus ? <Tick01Icon size={14} className="mr-1" /> : <AlertCircleIcon size={14} className="mr-1" />}
                         {status.backupStatus ? "Backed Up" : "Not Backed Up"}
                     </span>
                 </div>
@@ -295,7 +290,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ notification
                 <h4 className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
                     {notification.title}
                 </h4>
-                <span className="text-[10px] text-gray-400 flex items-center">
+                <span className="text-xs text-gray-500 flex items-center">
                     <Clock size={10} className="mr-1" />
                     {notification.time}
                 </span>

@@ -5,17 +5,17 @@ import { AuthContext } from '../App'
 import { apiService } from '../services/api'
 import favicon from '../../../shared/logo.png'
 import {
-    Users,
-    FileText,
-    Activity,
-    Clock,
-    AlertCircle,
-    ChevronRight,
-    Search,
-    Upload,
-    Shield,
-    TrendingUp
-} from 'lucide-react'
+    UserGroupIcon,
+    File01Icon,
+    Clock01Icon,
+    ActivityIcon,
+    AlertCircleIcon,
+    ArrowRight01Icon,
+    Search01Icon,
+    Upload01Icon,
+    Shield01Icon,
+    TrendingUpIcon,
+} from 'hugeicons-react'
 
 const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -93,29 +93,29 @@ export default function Dashboard() {
             title: 'Active Patients',
             value: dashboardStats.activePatients.toString(),
             change: 'Total patients in system',
-            icon: Users,
+            icon: UserGroupIcon,
             color: 'bg-blue-500'
         },
         {
             title: 'Records Uploaded',
             value: dashboardStats.recordsUploaded.toString(),
             change: 'Medical records stored',
-            icon: FileText,
-            color: 'bg-green-500'
+            icon: File01Icon,
+            color: 'bg-emerald-500'
         },
         {
             title: 'Pending Requests',
             value: dashboardStats.pendingRequests.toString(),
             change: 'Consent requests pending',
-            icon: Clock,
+            icon: Clock01Icon,
             color: 'bg-amber-500'
         },
         {
             title: 'Interoperability',
             value: dashboardStats.interoperabilityCount.toString(),
             change: 'Connected systems',
-            icon: Activity,
-            color: 'bg-purple-500'
+            icon: ActivityIcon,
+            color: 'bg-indigo-500'
         },
     ]
 
@@ -151,13 +151,17 @@ export default function Dashboard() {
             {/* Welcome Section */}
             <motion.div
                 variants={itemVariants}
-                className="bg-blue-600 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"
+                className="bg-slate-900 rounded-[2.5rem] p-10 md:p-14 text-white shadow-xl relative overflow-hidden"
             >
-                <div className="relative z-10">
-                    <h1 className="text-3xl font-bold mb-2">Provider Dashboard</h1>
-                    <p className="text-blue-100">Welcome back, {providerName || 'Doctor'}. Here's your healthcare management hub.</p>
+                <div className="relative z-10 max-w-2xl">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-6">
+                        <ActivityIcon size={16} />
+                        Command Center Active
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Welcome back, {providerName || 'Doctor'}.</h1>
+                    <p className="text-slate-400 text-xl leading-relaxed font-medium">Access clinical insights and manage patient data with blockchain security.</p>
                 </div>
-                <div className="absolute right-0 top-0 h-full w-1/2 bg-white/5 skew-x-12 transform origin-bottom-left" />
+                <div className="absolute right-0 top-0 h-full w-1/3 bg-blue-600/10 -skew-x-12 transform origin-bottom-left" />
             </motion.div>
 
             {/* Stats Grid */}
@@ -167,16 +171,15 @@ export default function Dashboard() {
                         key={index}
                         variants={itemVariants}
                         whileHover={{ scale: 1.02, y: -2 }}
-                        className="h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all"
+                        className="h-full w-full bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-lg hover:border-slate-200 transition-all duration-300"
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className={`p-4 rounded-lg ${stat.color} bg-opacity-10`}>
-                                <stat.icon className={`w-8 h-8 ${stat.color.replace('bg-', 'text-')}`} />
+                        <div className="flex items-center justify-between mb-6">
+                            <div className={`p-4 rounded-xl ${stat.color} bg-opacity-10 transition-transform group-hover:scale-110`}>
+                                <stat.icon size={28} className={stat.color.replace('bg-', 'text-')} />
                             </div>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
-                        <p className="text-sm text-gray-600 font-medium mb-1">{stat.title}</p>
-                        <p className="text-xs text-gray-500">{stat.change}</p>
+                        <h3 className="text-3xl font-extrabold text-slate-900 mb-1">{stat.value}</h3>
+                        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{stat.title}</p>
                     </motion.div>
                 ))}
             </motion.div>
@@ -195,19 +198,19 @@ export default function Dashboard() {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex items-start gap-4 p-4 bg-blue-50 rounded-lg border border-blue-100"
+                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
                         >
-                            <div className="p-2 rounded-full bg-blue-100 text-blue-600">
-                                <Search size={28} />
+                            <div className="p-3 rounded-xl bg-blue-600/10 text-blue-600">
+                                <Search01Icon size={24} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900 mb-1">Search for Patients</h3>
-                                <p className="text-sm text-gray-600 mb-3">Find patients by their DID or wallet address to access their medical records.</p>
+                                <h3 className="font-bold text-slate-900 mb-1">Search for Patients</h3>
+                                <p className="text-sm text-slate-500 mb-4">Find patients by their DID or wallet address to access their medical records.</p>
                                 <button
                                     onClick={handleSearchPatients}
-                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                                    className="text-sm text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1 group"
                                 >
-                                    Start Searching <ChevronRight size={16} />
+                                    Start Searching <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
                                 </button>
                             </div>
                         </motion.div>
@@ -216,19 +219,19 @@ export default function Dashboard() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="flex items-start gap-4 p-4 bg-green-50 rounded-lg border border-green-100"
+                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
                         >
-                            <div className="p-2 rounded-full bg-green-100 text-green-600">
-                                <FileText size={28} />
+                            <div className="p-3 rounded-xl bg-emerald-600/10 text-emerald-600">
+                                <File01Icon size={24} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900 mb-1">Upload Medical Records</h3>
-                                <p className="text-sm text-gray-600 mb-3">Add new observations, diagnoses, and medical records to the blockchain.</p>
+                                <h3 className="font-bold text-slate-900 mb-1">Upload Medical Records</h3>
+                                <p className="text-sm text-slate-500 mb-4">Add new observations, diagnoses, and medical records to the blockchain.</p>
                                 <button
                                     onClick={handleUploadRecords}
-                                    className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-1"
+                                    className="text-sm text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1 group"
                                 >
-                                    Upload Records <ChevronRight size={16} />
+                                    Upload Records <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
                                 </button>
                             </div>
                         </motion.div>
@@ -237,19 +240,19 @@ export default function Dashboard() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="flex items-start gap-4 p-4 bg-purple-50 rounded-lg border border-purple-100"
+                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
                         >
-                            <div className="p-2 rounded-full bg-purple-100 text-purple-600">
-                                <Shield size={28} />
+                            <div className="p-3 rounded-xl bg-indigo-600/10 text-indigo-600">
+                                <Shield01Icon size={24} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900 mb-1">Request Patient Consent</h3>
-                                <p className="text-sm text-gray-600 mb-3">Request access to patient records with blockchain-verified consent.</p>
+                                <h3 className="font-bold text-slate-900 mb-1">Request Patient Consent</h3>
+                                <p className="text-sm text-slate-500 mb-4">Request access to patient records with blockchain-verified consent.</p>
                                 <button
                                     onClick={handleRequestConsent}
-                                    className="text-sm text-purple-600 hover:text-purple-700 font-medium flex items-center gap-1"
+                                    className="text-sm text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1 group"
                                 >
-                                    Request Access <ChevronRight size={16} />
+                                    Request Access <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
                                 </button>
                             </div>
                         </motion.div>
@@ -267,52 +270,52 @@ export default function Dashboard() {
                             onClick={handleSearchPatients}
                             whileHover={{ scale: 1.02, x: 2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors group"
+                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-blue-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
                         >
                             <div className="flex items-center gap-3">
-                                <Search size={24} />
-                                <span className="font-medium">Search Patients</span>
+                                <Search01Icon size={22} />
+                                <span className="font-bold">Search Patients</span>
                             </div>
-                            <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-blue-600 transition-all group-hover:translate-x-1" />
                         </motion.button>
 
                         <motion.button
                             onClick={handleUploadRecords}
                             whileHover={{ scale: 1.02, x: 2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors group"
+                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-emerald-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
                         >
                             <div className="flex items-center gap-3">
-                                <Upload size={24} />
-                                <span className="font-medium">Upload Records</span>
+                                <Upload01Icon size={22} />
+                                <span className="font-bold">Upload Records</span>
                             </div>
-                            <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-emerald-600 transition-all group-hover:translate-x-1" />
                         </motion.button>
 
                         <motion.button
                             onClick={handleRequestConsent}
                             whileHover={{ scale: 1.02, x: 2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors group"
+                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-indigo-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
                         >
                             <div className="flex items-center gap-3">
-                                <Shield size={24} />
-                                <span className="font-medium">Request Consent</span>
+                                <Shield01Icon size={22} />
+                                <span className="font-bold">Request Consent</span>
                             </div>
-                            <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-indigo-600 transition-all group-hover:translate-x-1" />
                         </motion.button>
 
                         <motion.button
                             onClick={() => navigate('/interoperability')}
                             whileHover={{ scale: 1.02, x: 2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors group"
+                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-slate-700 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
                         >
                             <div className="flex items-center gap-3">
-                                <Activity size={24} />
-                                <span className="font-medium">Interoperability</span>
+                                <ActivityIcon size={22} />
+                                <span className="font-bold">Interoperability</span>
                             </div>
-                            <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-slate-700 transition-all group-hover:translate-x-1" />
                         </motion.button>
                     </div>
 

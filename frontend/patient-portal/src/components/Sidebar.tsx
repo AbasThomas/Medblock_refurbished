@@ -57,7 +57,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
 
 
 
-    const mixedPatientId = formatPatientId(did)
+    const mixedPatientId = formatPatientId(did, true)
 
     const sidebarContent = (
         <div className="flex flex-col h-full">
@@ -83,7 +83,7 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                                 <h1 className="text-lg font-bold text-[#20305B] leading-none">
                                     MEDBLOCK
                                 </h1>
-                                <span className="text-[10px] text-blue-600 font-bold tracking-tight mt-0.5">
+                                <span className="text-xs text-blue-600 font-bold tracking-tight mt-0.5">
                                     PATIENT PORTAL
                                 </span>
                             </motion.div>

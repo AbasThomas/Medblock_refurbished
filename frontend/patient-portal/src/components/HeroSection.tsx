@@ -127,7 +127,7 @@ const HeroSection: React.FC = () => {
                     initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
                     animate={{ scale: 1, opacity: 1, rotateY: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="relative w-full max-w-md aspect-[1.586/1] rounded-[2rem] bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-2xl shadow-blue-900/40 cursor-pointer group"
+                    className="relative w-full max-w-md aspect-[1.586/1] rounded-[2rem] bg-slate-900 p-8 shadow-2xl shadow-slate-900/20 cursor-pointer group"
                 >
                     {/* Card Shine Effect */}
                     <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"></div>
@@ -149,7 +149,7 @@ const HeroSection: React.FC = () => {
 
                         <div className="space-y-4">
                             <div className="flex items-end gap-4">
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center shadow-lg border border-white/10">
+                                <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg border border-white/10">
                                     <Users size={28} className="text-white" />
                                 </div>
                                 <div>
