@@ -71,7 +71,7 @@ export default function LoginPage() {
                     <p className="text-slate-500 mt-2">Sign in to your patient portal</p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-3xl p-8">
+                <div className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8">
                     {error && (
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
@@ -83,10 +83,10 @@ export default function LoginPage() {
                         </motion.div>
                     )}
 
-                    <div className="mb-8 p-1 bg-slate-100/80 rounded-xl flex relative">
+                    <div className="mb-8 p-1 bg-slate-100 rounded-xl flex relative">
                         {/* Sliding Background */}
                         <motion.div
-                            className="absolute bg-white rounded-lg shadow-sm border border-slate-200/50 h-[calc(100%-8px)] top-1 bottom-1"
+                            className="absolute bg-white rounded-lg shadow-sm border border-slate-200 h-[calc(100%-8px)] top-1 bottom-1"
                             initial={false}
                             animate={{
                                 x: authMode === 'password' ? 4 : '100%',
@@ -124,7 +124,7 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="you@example.com"
-                                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
+                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
                                 />
                             </div>
                         </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 placeholder="Enter your password"
-                                                className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
+                                                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pl-10 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
                                             />
                                         </div>
                                     </motion.div>
@@ -171,7 +171,7 @@ export default function LoginPage() {
                                                 onChange={(e) => setPin(e.target.value)}
                                                 maxLength={5}
                                                 placeholder="•••••"
-                                                className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-center text-lg tracking-[0.5em] font-mono text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
+                                                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-lg tracking-[0.5em] font-mono text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
                                             />
                                         </div>
                                     </motion.div>
@@ -182,7 +182,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold shadow-lg shadow-blue-900/10 transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {isSubmitting ? (
                                 <>

@@ -82,7 +82,7 @@ const OtpVerification: React.FC = () => {
     const handlePaste = (e: React.ClipboardEvent) => {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').slice(0, 6);
-        
+
         if (!/^\d+$/.test(pastedData)) return;
 
         const newOtp = pastedData.split('').concat(Array(6 - pastedData.length).fill(''));
@@ -100,7 +100,7 @@ const OtpVerification: React.FC = () => {
 
     const handleVerify = async (otpCode?: string) => {
         const code = otpCode || otp.join('');
-        
+
         if (code.length !== 6) {
             setError('Please enter all 6 digits');
             return;
@@ -111,10 +111,10 @@ const OtpVerification: React.FC = () => {
 
         try {
             const result = await verifyOtpAndCreateProvider(email, code);
-            
+
             // Store credentials locally via AuthContext
             login(result.name || email, result.did, result.accessToken);
-            
+
             // Add to recent providers (device specific)
             addRecentProvider({
                 name: result.name || email,
@@ -142,7 +142,7 @@ const OtpVerification: React.FC = () => {
             // Re-request OTP with the same registration data
             const { requestProviderOtp } = await import('../services/api');
             await requestProviderOtp(registrationData);
-            
+
             setTimeLeft(300); // Reset timer
             setOtp(['', '', '', '', '', '']);
             inputRefs.current[0]?.focus();
@@ -163,7 +163,7 @@ const OtpVerification: React.FC = () => {
             <div className="max-w-2xl w-full z-10">
                 <div className="text-center mb-8">
                     <div className="flex items-center justify-center mb-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg">
+                        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
                             <Mail size={32} className="text-white" />
                         </div>
                     </div>
@@ -173,7 +173,7 @@ const OtpVerification: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
+                <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
                     <div className="flex items-center gap-2 mb-6">
                         <ShieldCheck className="w-5 h-5 text-green-600" />
                         <p className="text-sm text-gray-600">Secure identity verification</p>
@@ -207,7 +207,7 @@ const OtpVerification: React.FC = () => {
                     <button
                         onClick={() => handleVerify()}
                         disabled={loading || otp.join('').length !== 6}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg active:scale-[0.98] transition-all duration-200"
                     >
                         {loading ? 'Verifying...' : 'Verify & Continue'}
                     </button>
@@ -219,19 +219,18 @@ const OtpVerification: React.FC = () => {
                         <button
                             onClick={handleResend}
                             disabled={timeLeft > 0 || resending}
-                            className={`flex items-center justify-center space-x-2 mx-auto ${
-                                timeLeft > 0 || resending
-                                    ? 'text-gray-400 cursor-not-allowed'
-                                    : 'text-blue-600 hover:text-blue-700'
-                            }`}
+                            className={`flex items-center justify-center space-x-2 mx-auto ${timeLeft > 0 || resending
+                                ? 'text-gray-400 cursor-not-allowed'
+                                : 'text-blue-600 hover:text-blue-700'
+                                }`}
                         >
                             <RefreshCcw className={`w-4 h-4 ${resending ? 'animate-spin' : ''}`} />
                             <span>
                                 {resending
                                     ? 'Resending...'
                                     : timeLeft > 0
-                                    ? `Resend in ${formatTime(timeLeft)}`
-                                    : 'Resend Code'}
+                                        ? `Resend in ${formatTime(timeLeft)}`
+                                        : 'Resend Code'}
                             </span>
                         </button>
                     </div>
@@ -251,7 +250,7 @@ const OtpVerification: React.FC = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

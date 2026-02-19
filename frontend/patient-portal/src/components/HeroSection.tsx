@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ArrowRight, Shield, Lock, Zap, Users, Activity, Fingerprint, QrCode } from 'lucide-react'
+import { ArrowRight, Shield, Lock, Users, Activity, Fingerprint, QrCode } from 'lucide-react'
 
 const HeroSection: React.FC = () => {
     // 3D Card Effect Logic
@@ -58,7 +58,7 @@ const HeroSection: React.FC = () => {
                     className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] text-slate-900 tracking-tight"
                 >
                     Your Health Identity. <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <span className="text-blue-600">
                         Secure & Portable.
                     </span>
                 </motion.h1>
@@ -80,7 +80,7 @@ const HeroSection: React.FC = () => {
                 >
                     <Link
                         to="/register"
-                        className="group relative inline-flex items-center gap-2 rounded-full bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/20 transition-all hover:bg-slate-800 hover:shadow-slate-900/30 hover:-translate-y-1"
+                        className="group relative inline-flex items-center gap-2 rounded-full bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-slate-900/20 hover:-translate-y-1"
                     >
                         Create My Account
                         <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -113,7 +113,7 @@ const HeroSection: React.FC = () => {
             <div className="w-full lg:w-1/2 mt-16 lg:mt-0 relative perspective-1000 flex items-center justify-center">
 
                 {/* Decorative Background Elements */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-50/50 rounded-full -z-10"></div>
 
                 <motion.div
                     ref={cardRef}
@@ -141,7 +141,7 @@ const HeroSection: React.FC = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-lg leading-tight tracking-wide">MEDBLOCK</h3>
-                                    <p className="text-[10px] text-blue-300 font-mono tracking-wider uppercase">Universal Health ID</p>
+                                    <p className="text-xs text-blue-300 font-mono tracking-wider uppercase">Universal Health ID</p>
                                 </div>
                             </div>
                             <QrCode className="text-white/20" size={32} />
@@ -159,11 +159,11 @@ const HeroSection: React.FC = () => {
                             </div>
                             <div className="flex gap-8">
                                 <div>
-                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">ID Number</p>
+                                    <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">ID Number</p>
                                     <p className="font-mono text-blue-200 tracking-widest text-sm">•••• •••• •••• 8842</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Valid Thru</p>
+                                    <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Valid Thru</p>
                                     <p className="font-mono text-white text-sm">12/29</p>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@ const HeroSection: React.FC = () => {
                         </div>
                         <div>
                             <p className="text-xs font-bold text-slate-800">Verified</p>
-                            <p className="text-[10px] text-slate-500">Identity Confirmed</p>
+                            <p className="text-xs text-slate-500">Identity Confirmed</p>
                         </div>
                     </motion.div>
 
@@ -194,7 +194,7 @@ const HeroSection: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-xs font-bold text-slate-800">Biometric</p>
-                                <p className="text-[10px] text-slate-500">Access Enabled</p>
+                                <p className="text-xs text-slate-500">Access Enabled</p>
                             </div>
                         </div>
                     </motion.div>

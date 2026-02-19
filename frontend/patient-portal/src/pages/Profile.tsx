@@ -165,14 +165,14 @@ export default function Profile() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleExportData}
-                        className="px-4 py-2 bg-white/80 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-all backdrop-blur-sm"
+                        className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-all"
                     >
                         <Download size={16} />
                         Export Data
                     </button>
                     <button
                         onClick={handleLogout}
-                        className="px-4 py-2 bg-red-50/80 border border-red-200 rounded-lg text-sm font-medium text-red-700 hover:bg-red-100 flex items-center gap-2 shadow-sm transition-all backdrop-blur-sm"
+                        className="px-4 py-2 bg-red-50 border border-red-200 rounded-lg text-sm font-medium text-red-700 hover:bg-red-100 flex items-center gap-2 shadow-sm transition-all"
                     >
                         <LogOut size={16} />
                         Logout
@@ -180,7 +180,7 @@ export default function Profile() {
                 </div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="flex border-b border-gray-200 overflow-x-auto">
                     <button
                         onClick={() => setActiveTab('general')}
@@ -209,7 +209,7 @@ export default function Profile() {
                             >
                                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
                                     <div className="relative">
-                                        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center text-blue-700 text-3xl font-bold shadow-inner">
+                                        <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 text-3xl font-bold shadow-inner">
                                             {formData.firstName.charAt(0) || <User size={40} />}
                                         </div>
                                         <div className="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
@@ -372,7 +372,7 @@ export default function Profile() {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white/50 backdrop-blur-sm">
+                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white">
                                         <div className="flex items-center gap-3">
                                             <Shield className="text-green-600" size={24} />
                                             <div>
@@ -386,7 +386,7 @@ export default function Profile() {
                                         </label>
                                     </div>
 
-                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white/50 backdrop-blur-sm">
+                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white">
                                         <div className="flex items-center gap-3">
                                             <Bell className="text-blue-600" size={24} />
                                             <div>
@@ -400,7 +400,7 @@ export default function Profile() {
                                         </label>
                                     </div>
 
-                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white/50 backdrop-blur-sm">
+                                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg bg-white">
                                         <div className="flex items-center gap-3">
                                             <Key className="text-amber-600" size={24} />
                                             <div>

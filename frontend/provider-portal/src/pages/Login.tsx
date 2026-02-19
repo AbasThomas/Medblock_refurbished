@@ -2,8 +2,8 @@ import { useState, useContext, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { AuthContext } from '../App'
 import { PORTAL_URLS } from '@medblock/shared'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Lock, ArrowLeft, Eye, EyeOff, Zap, Shield, CheckCircle, Clock, User, Building, LogIn, ChevronRight, Activity } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Mail, Lock, ArrowLeft, Eye, EyeOff, Shield, CheckCircle, LogIn, ChevronRight } from 'lucide-react'
 import logo from '../../../shared/logo.png'
 import BackgroundLayer from '@/components/BackgroundLayer'
 import { apiService } from '../services/api'
@@ -15,7 +15,6 @@ export default function Login() {
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
     const [recentProviders, setRecentProviders] = useState<any[]>([])
-    const [loadingRecent, setLoadingRecent] = useState(true)
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -24,10 +23,8 @@ export default function Login() {
     }, [])
 
     const loadRecentProviders = () => {
-        setLoadingRecent(true)
         const providers = getRecentProviders()
         setRecentProviders(providers)
-        setLoadingRecent(false)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -90,8 +87,6 @@ export default function Login() {
             {/* Left Panel - Branding & Info */}
             <div className="hidden lg:flex w-5/12 bg-slate-900 text-white relative flex-col justify-between p-12 overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                    <div className="absolute top-[-20%] right-[-20%] w-[800px] h-[800px] rounded-full bg-blue-500 blur-3xl"></div>
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600 blur-3xl"></div>
                 </div>
 
                 <div className="relative z-10">
@@ -107,7 +102,7 @@ export default function Login() {
                 </div>
 
                 <div className="relative z-10 space-y-6">
-                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
+                    <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6">
                         <div className="flex items-center gap-4 mb-4">
                             <div className="bg-blue-500/20 p-3 rounded-lg text-blue-400">
                                 <Shield size={24} />
@@ -146,7 +141,7 @@ export default function Login() {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl rounded-3xl p-8"
+                        className="bg-white border border-slate-200 shadow-xl rounded-3xl p-8"
                     >
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
@@ -194,7 +189,7 @@ export default function Login() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold shadow-lg shadow-blue-900/10 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? (
                                     <>Processing...</>
@@ -211,7 +206,7 @@ export default function Login() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="bg-white/60 backdrop-blur-md border border-white/60 rounded-2xl p-6"
+                            className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"
                         >
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Quick Access</h3>

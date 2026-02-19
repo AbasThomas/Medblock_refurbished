@@ -23,7 +23,7 @@ const ResetPassword: React.FC = () => {
     const [success, setSuccess] = useState(false);
     const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
     const [resending, setResending] = useState(false);
-    
+
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
@@ -49,11 +49,11 @@ const ResetPassword: React.FC = () => {
 
         setResending(true);
         setError('');
-        
+
         try {
             await requestPasswordReset(email);
             setTimeLeft(300); // Reset timer to 5 minutes
-            
+
             // Show toast or temporary success message if needed, but the button text update is usually enough
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to resend code. Please try again.');
@@ -75,7 +75,7 @@ const ResetPassword: React.FC = () => {
             inputRefs.current[index - 1]?.focus();
         }
     };
-    
+
     const handlePaste = (e: React.ClipboardEvent) => {
         e.preventDefault();
         const pastedData = e.clipboardData.getData('text').slice(0, 6);
@@ -127,10 +127,10 @@ const ResetPassword: React.FC = () => {
     return (
         <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
             <BackgroundLayer />
-            
+
             <div className="max-w-md w-full relative z-10">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
                         <Lock className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">Reset Password</h1>
@@ -139,7 +139,7 @@ const ResetPassword: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
+                <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
                     {success ? (
                         <div className="text-center py-8">
                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -160,11 +160,11 @@ const ResetPassword: React.FC = () => {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+                                        className="block w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-slate-50"
                                     />
                                 </div>
                             )}
-                            
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-3 text-center">
                                     Verification Code
@@ -184,24 +184,23 @@ const ResetPassword: React.FC = () => {
                                         />
                                     ))}
                                 </div>
-                                
+
                                 <div className="text-center mt-4">
                                     <button
                                         type="button"
                                         onClick={handleResend}
                                         disabled={timeLeft > 0 || resending}
-                                        className={`inline-flex items-center justify-center gap-2 text-sm font-medium ${
-                                            timeLeft > 0 || resending
-                                                ? 'text-gray-400 cursor-not-allowed'
-                                                : 'text-blue-600 hover:text-blue-700'
-                                        }`}
+                                        className={`inline-flex items-center justify-center gap-2 text-sm font-medium ${timeLeft > 0 || resending
+                                            ? 'text-gray-500 cursor-not-allowed'
+                                            : 'text-blue-600 hover:text-blue-700'
+                                            }`}
                                     >
                                         <RefreshCcw className={`w-3.5 h-3.5 ${resending ? 'animate-spin' : ''}`} />
                                         {resending
                                             ? 'Resending...'
                                             : timeLeft > 0
-                                            ? `Resend code in ${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
-                                            : 'Resend Verification Code'}
+                                                ? `Resend code in ${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
+                                                : 'Resend Verification Code'}
                                     </button>
                                 </div>
                             </div>
@@ -215,13 +214,13 @@ const ResetPassword: React.FC = () => {
                                             required
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-white/50 pr-10"
+                                            className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-slate-50 pr-10"
                                             placeholder="Min. 8 characters"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-600"
                                         >
                                             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
@@ -235,7 +234,7 @@ const ResetPassword: React.FC = () => {
                                         required
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+                                        className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-slate-50"
                                         placeholder="Confirm new password"
                                     />
                                 </div>
@@ -250,7 +249,7 @@ const ResetPassword: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-all duration-200"
+                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-all duration-200"
                             >
                                 {loading ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -272,7 +271,7 @@ const ResetPassword: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

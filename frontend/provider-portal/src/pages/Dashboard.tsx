@@ -151,7 +151,7 @@ export default function Dashboard() {
             {/* Welcome Section */}
             <motion.div
                 variants={itemVariants}
-                className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"
+                className="bg-blue-600 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"
             >
                 <div className="relative z-10">
                     <h1 className="text-3xl font-bold mb-2">Provider Dashboard</h1>
@@ -167,7 +167,7 @@ export default function Dashboard() {
                         key={index}
                         variants={itemVariants}
                         whileHover={{ scale: 1.02, y: -2 }}
-                        className="h-full w-full bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all"
+                        className="h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6 hover:shadow-md transition-all"
                     >
                         <div className="flex items-center justify-between mb-4">
                             <div className={`p-4 rounded-lg ${stat.color} bg-opacity-10`}>
@@ -176,7 +176,7 @@ export default function Dashboard() {
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
                         <p className="text-sm text-gray-600 font-medium mb-1">{stat.title}</p>
-                        <p className="text-xs text-gray-400">{stat.change}</p>
+                        <p className="text-xs text-gray-500">{stat.change}</p>
                     </motion.div>
                 ))}
             </motion.div>
@@ -185,7 +185,7 @@ export default function Dashboard() {
                 {/* Getting Started */}
                 <motion.div
                     variants={itemVariants}
-                    className="lg:col-span-2 h-full w-full bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm p-6"
+                    className="lg:col-span-2 h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6"
                 >
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-lg font-bold text-gray-900">Getting Started</h2>
@@ -259,7 +259,7 @@ export default function Dashboard() {
                 {/* Quick Actions */}
                 <motion.div
                     variants={itemVariants}
-                    className="h-full w-full bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm p-6"
+                    className="h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6"
                 >
                     <h2 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h2>
                     <div className="space-y-3">
@@ -349,7 +349,7 @@ export default function Dashboard() {
             {/* Info Banner */}
             <motion.div
                 variants={itemVariants}
-                className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4"
+                className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4"
             >
                 <div className="p-3 bg-blue-100 rounded-xl flex-shrink-0">
                     <AlertCircle className="w-8 h-8 text-blue-600" />

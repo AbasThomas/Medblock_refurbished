@@ -18,7 +18,8 @@ const HeroSection: React.FC = () => {
         <section className="relative flex flex-col lg:flex-row items-center pt-32 pb-20 overflow-visible max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {/* Background Gradients */}
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl -z-10 -translate-y-1/4 translate-x-1/4"></div>
+            {/* Background Gradients */}
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-50/30 rounded-full -z-10 -translate-y-1/4 translate-x-1/4"></div>
 
             {/* Left Content */}
             <div className="w-full lg:w-1/2 z-10 text-center lg:text-left mb-16 lg:mb-0">
@@ -42,7 +43,7 @@ const HeroSection: React.FC = () => {
                     className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6 leading-[1.1]"
                 >
                     Command your <br className="hidden lg:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <span className="text-blue-600">
                         Clinical data flow.
                     </span>
                 </motion.h1>
@@ -64,7 +65,7 @@ const HeroSection: React.FC = () => {
                 >
                     <Link
                         to="/signup"
-                        className="group bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                        className="group bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                     >
                         Access Dashboard
                         <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -94,7 +95,7 @@ const HeroSection: React.FC = () => {
                             <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                             <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
                         </div>
-                        <div className="flex-1 bg-slate-100 h-6 rounded-md ml-4 max-w-[200px] flex items-center px-2 text-[10px] text-slate-400">
+                        <div className="flex-1 bg-slate-100 h-6 rounded-md ml-4 max-w-[200px] flex items-center px-2 text-xs text-slate-400">
                             provider.medblock.app/dashboard
                         </div>
                     </div>
@@ -218,7 +219,7 @@ const HeroSection: React.FC = () => {
                         </div>
                         <div>
                             <p className="text-xs font-bold text-slate-800">System Status</p>
-                            <p className="text-[10px] text-emerald-600 font-semibold">100% Operational</p>
+                            <p className="text-xs text-emerald-600 font-semibold">100% Operational</p>
                         </div>
                     </motion.div>
                 </motion.div>

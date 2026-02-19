@@ -19,7 +19,7 @@ const ForgotPassword: React.FC = () => {
         try {
             await requestPasswordReset(email);
             setSuccess(true);
-            
+
             // Navigate to Reset Password page after short delay or immediately
             // Pass email in state so they don't have to re-enter it
             setTimeout(() => {
@@ -35,10 +35,10 @@ const ForgotPassword: React.FC = () => {
     return (
         <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
             <BackgroundLayer />
-            
+
             <div className="max-w-md w-full relative z-10">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
                         <KeyRound className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">Forgot Password?</h1>
@@ -47,7 +47,7 @@ const ForgotPassword: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
+                <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
                     {success ? (
                         <div className="text-center py-4">
                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -66,14 +66,14 @@ const ForgotPassword: React.FC = () => {
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-gray-400" />
+                                        <Mail className="h-5 w-5 text-gray-500" />
                                     </div>
                                     <input
                                         type="email"
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-white/50 backdrop-blur-sm transition-all"
+                                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 bg-slate-50 transition-all"
                                         placeholder="you@hospital.com"
                                     />
                                 </div>
@@ -88,7 +88,7 @@ const ForgotPassword: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading || !email}
-                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                             >
                                 {loading ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -110,7 +110,7 @@ const ForgotPassword: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

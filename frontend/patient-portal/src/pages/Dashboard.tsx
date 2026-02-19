@@ -335,7 +335,7 @@ export default function Dashboard() {
             </div>
 
             {/* Quick Actions */}
-            <motion.div variants={itemVariants} className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 p-6">
+            <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <Zap className="text-blue-600" size={32} />
                     Quick Actions
@@ -350,7 +350,7 @@ export default function Dashboard() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className={`flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br ${action.color} text-white shadow-sm hover:shadow-md transition-all duration-300`}
+                            className={`flex flex-col items-center justify-center p-4 rounded-xl ${action.color.replace('from-', 'bg-').replace(' to-', '-600 hover:bg-')} text-white shadow-sm hover:shadow-md transition-all duration-300`}
                         >
                             <action.icon size={32} className="mb-2" />
                             <span className="text-sm font-medium text-center">{action.name}</span>
@@ -363,7 +363,7 @@ export default function Dashboard() {
                 {/* Recent Records */}
                 <motion.div
                     variants={itemVariants}
-                    className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 p-6"
+                    className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 sm:gap-0">
                         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -398,7 +398,7 @@ export default function Dashboard() {
                         <div className="text-center py-12">
                             <FileText className="w-20 h-20 text-gray-300 mx-auto mb-4" />
                             <p className="text-gray-500 font-medium mb-2">No medical records yet</p>
-                            <p className="text-gray-400 text-sm mb-4">Your medical records will appear here</p>
+                            <p className="text-gray-500 text-sm mb-4">Your medical records will appear here</p>
                             <button
                                 onClick={() => navigate('/records')}
                                 className="px-4 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all inline-flex items-center gap-2"
@@ -413,7 +413,7 @@ export default function Dashboard() {
                 {/* Active Consents */}
                 <motion.div
                     variants={itemVariants}
-                    className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 p-6"
+                    className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
                 >
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -452,7 +452,7 @@ export default function Dashboard() {
                         <div className="text-center py-12">
                             <Shield className="w-20 h-20 text-gray-300 mx-auto mb-4" />
                             <p className="text-gray-500 font-medium mb-2">No active consents</p>
-                            <p className="text-gray-400 text-sm mb-4">Grant access to healthcare providers</p>
+                            <p className="text-gray-500 text-sm mb-4">Grant access to healthcare providers</p>
                             <button
                                 onClick={handleGrantConsent}
                                 className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-all inline-flex items-center gap-2"
@@ -468,7 +468,7 @@ export default function Dashboard() {
             {/* Security & Health Status */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Security Status */}
-                <motion.div variants={itemVariants} className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-3 mb-6">
                         <div className="bg-green-100 p-2 rounded-xl">
                             <Shield className="w-5 h-5 text-green-600" />
@@ -490,7 +490,7 @@ export default function Dashboard() {
                         </div>
                         <button
                             onClick={handleVerifyHash}
-                            className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2"
+                            className="w-full px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                         >
                             <CheckCircle size={24} />
                             Verify Blockchain Hash
@@ -499,7 +499,7 @@ export default function Dashboard() {
                 </motion.div>
 
                 {/* Activity Summary */}
-                <motion.div variants={itemVariants} className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-3 mb-6">
                         <div className="bg-purple-100 p-2 rounded-xl">
                             <Activity className="w-5 h-5 text-purple-600" />
@@ -541,7 +541,7 @@ export default function Dashboard() {
             {/* Info Banner */}
             <motion.div
                 variants={itemVariants}
-                className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 flex items-start gap-4"
+                className="bg-blue-50 border border-blue-200 rounded-2xl p-6 flex items-start gap-4"
             >
                 <div className="p-3 bg-blue-100 rounded-xl flex-shrink-0">
                     <AlertTriangle className="w-8 h-8 text-blue-600" />
