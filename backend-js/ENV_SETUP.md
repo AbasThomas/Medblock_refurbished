@@ -4,7 +4,8 @@
 
 ### Database Configuration
 ```
-DATABASE_URL=postgresql://username:password@host:port/database?sslmode=require
+DATABASE_URL=postgresql://username:password@host:port/database
+DATABASE_SSL=true
 ```
 
 ### JWT Secret
@@ -64,7 +65,8 @@ If email is not configured, the OTP will be logged to the console for testing pu
 
 ```env
 # Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/medblock?sslmode=require
+DATABASE_URL=postgresql://user:pass@localhost:5432/medblock
+DATABASE_SSL=false
 
 # JWT
 JWT_SECRET=super-secret-key-change-in-production

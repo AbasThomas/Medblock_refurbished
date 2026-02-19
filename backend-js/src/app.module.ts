@@ -36,10 +36,51 @@ import { ReportsModule } from './reports/reports.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const type = configService.get<string>('DATABASE_TYPE', 'postgres');
-        const databaseSsl = configService
-          .get<string>('DATABASE_SSL', 'true')
-          .toLowerCase() === 'true';
+        const type = configService
+          .get<string>('DATABASE_TYPE', 'postgres')
+          .toLowerCase();
+        const databaseSslOverride = configService
+          .get<string>('DATABASE_SSL', 'auto')
+          .trim()
+          .toLowerCase();
+
+        const isLikelyLocalDatabaseHost = (host?: string): boolean => {
+          if (!host) {
+            return true;
+          }
+
+          const normalizedHost = host.trim().toLowerCase();
+          return (
+            normalizedHost === 'localhost' ||
+            normalizedHost === '127.0.0.1' ||
+            normalizedHost === '::1' ||
+            normalizedHost.endsWith('.local') ||
+            !normalizedHost.includes('.')
+          );
+        };
+
+        const resolveDatabaseSsl = (databaseUrl?: string): boolean => {
+          if (databaseSslOverride === 'true') {
+            return true;
+          }
+
+          if (databaseSslOverride === 'false') {
+            return false;
+          }
+
+          if (databaseUrl) {
+            try {
+              return !isLikelyLocalDatabaseHost(new URL(databaseUrl).hostname);
+            } catch {
+              // Fall back to host-based detection when DATABASE_URL is malformed.
+            }
+          }
+
+          return !isLikelyLocalDatabaseHost(
+            configService.get<string>('DATABASE_HOST', 'localhost'),
+          );
+        };
+
         const commonConfig = {
           entities: [
             Patient,
@@ -78,6 +119,8 @@ import { ReportsModule } from './reports/reports.module';
             databaseUrl = databaseUrl.slice(1, -1);
           }
 
+          const databaseSsl = resolveDatabaseSsl(databaseUrl);
+
           // Remove SSL parameters from the URL as we'll set them explicitly
           // This prevents conflicts with Railway's default SSL settings
           databaseUrl = databaseUrl.replace(/[?&]sslmode=[^&]*/g, '');
@@ -101,6 +144,8 @@ import { ReportsModule } from './reports/reports.module';
             ...commonConfig,
           };
         }
+
+        const databaseSsl = resolveDatabaseSsl();
 
         return {
           type: 'postgres',
