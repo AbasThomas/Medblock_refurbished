@@ -4,21 +4,20 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PORTAL_URLS } from '@medblock/shared'
 import {
-  Shield01Icon,
-  UserIcon,
-  Mail01Icon,
-  AccessIcon,
-  Hospital01Icon,
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  ViewIcon,
-  ViewOffIcon,
-  Calendar01Icon,
-  Upload01Icon,
-  Tick01Icon,
-  AlertCircleIcon,
-  FingerPrintIcon,
-} from 'hugeicons-react'
+  Shield,
+  User,
+  Mail,
+  Lock,
+  Building,
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
+  Calendar,
+  FileUp,
+  CheckCircle2,
+  AlertTriangle,
+  Fingerprint,
+} from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { requestProviderOtp } from '../services/api'
 import Swal from 'sweetalert2'
@@ -59,10 +58,10 @@ const specialties = [
 const issuingAuthorities = ['MDCN', 'NMCN', 'State Ministry of Health', 'Pharmacists Council of Nigeria', 'Other']
 
 const STEPS = [
-  { id: 'account', title: 'Account Credentials', description: 'Email, password & PIN' },
-  { id: 'identity', title: 'Professional Identity', description: 'Name, specialty, institution' },
-  { id: 'credentials', title: 'Credentials', description: 'Licensing + documents' },
-  { id: 'consent', title: 'Consent Review', description: 'Agree to policies' },
+  { id: 'account', title: 'Account', description: 'Credentials & PIN' },
+  { id: 'identity', title: 'Identity', description: 'Name & specialty' },
+  { id: 'credentials', title: 'Credentials', description: 'Licensing verification' },
+  { id: 'consent', title: 'Consent', description: 'Agreements & privacy' },
 ]
 
 type SignUpForm = {
@@ -103,16 +102,15 @@ const initialForm: SignUpForm = {
 
 const InputField = ({ label, icon: Icon, error, ...props }: any) => (
   <div>
-    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5 ml-1">{label}</label>
-    <div className="relative group">
-      {Icon && <Icon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />}
+    <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+    <div className="relative">
+      {Icon && <Icon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />}
       <input
-        className={`w-full rounded-2xl border px-5 py-4 pl-12 text-sm font-medium focus:bg-white focus:outline-none transition-all ${error ? 'border-rose-200 bg-rose-50/30 focus:ring-rose-500/10 focus:border-rose-500' : 'border-slate-200 bg-slate-50/30 focus:ring-blue-500/10 focus:border-blue-500 shadow-sm'
-          }`}
+        className={`w-full ${Icon ? 'pl-10' : 'px-4'} pr-4 py-3 bg-gray-50/50 border ${error ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-blue-100 focus:border-blue-500'} rounded-xl focus:ring-4 outline-none transition-all duration-200 text-sm text-slate-700`}
         {...props}
       />
     </div>
-    {error && <p className="text-[10px] font-bold text-rose-600 mt-2 ml-1 uppercase tracking-wider">{error}</p>}
+    {error && <p className="text-xs text-red-500 mt-1 ml-1">{error}</p>}
   </div>
 )
 
@@ -204,7 +202,6 @@ const SignUpPage: React.FC = () => {
       handleNext()
       return
     }
-
     setIsSubmitting(true)
     try {
       const res = await requestProviderOtp({
@@ -244,116 +241,103 @@ const SignUpPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-[#f8fafc] relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 relative overflow-hidden bg-[#f8fafc]">
       <BackgroundLayer />
-      <div className="w-full max-w-6xl z-10 grid lg:grid-cols-[0.8fr_1.2fr] gap-12">
-        {/* Left Sidebar - Progress */}
+      <div className="w-full max-w-5xl z-10 flex flex-col md:flex-row gap-6 items-stretch">
+        {/* Left Side: Progress & Info */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-          className="bg-slate-900 rounded-[2.5rem] p-10 flex flex-col text-white relative overflow-hidden"
+          className="md:w-1/3 bg-white rounded-3xl border border-gray-200 shadow-xl p-8 flex flex-col"
         >
-          <div className="relative z-10">
-            <img src={logo} alt="MEDBLOCK" className="h-14 w-14 mb-8 bg-white/10 p-2 rounded-2xl" />
-            <h1 className="text-4xl font-black mb-4 leading-tight">Provider Registration</h1>
-            <p className="text-slate-400 text-lg font-medium leading-relaxed mb-12">
-              Onboard with your license, consent to secure blockchain architecture, and manage patients in a trusted national EMR.
-            </p>
-
-            <div className="space-y-8 flex-1">
-              {STEPS.map((step, index) => {
-                const isActive = index === currentStep
-                const isCompleted = index < currentStep
-                return (
-                  <div key={step.id} className="flex gap-6 relative group">
-                    {index !== STEPS.length - 1 && (
-                      <div className={`absolute left-[19px] top-[42px] bottom-[-24px] w-[2px] ${isCompleted ? 'bg-blue-500' : 'bg-slate-800'}`} />
-                    )}
-                    <div
-                      className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm transition-all duration-300 ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40' : isCompleted ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'}`}
-                    >
-                      {isCompleted ? <Tick01Icon size={20} /> : index + 1}
-                    </div>
-                    <div>
-                      <p className={`text-[10px] uppercase font-black tracking-widest ${isActive ? 'text-blue-400' : 'text-slate-500'}`}>{step.title}</p>
-                      <p className={`text-sm font-bold ${isActive ? 'text-white' : 'text-slate-400'}`}>{step.description}</p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-white/5">
-              <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
-                Already onboarded?{' '}
-                <a href="/login" className="text-blue-400 hover:text-blue-300 transition-colors">
-                  Sign in
-                </a>
-              </p>
-            </div>
+          <div className="mb-8">
+            <img src={logo} alt="MEDBLOCK" className="w-16 h-16 object-contain mb-4" />
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Provider Registration</h1>
+            <p className="text-slate-500 text-sm mt-2">Join Nigeria’s national EMR infrastructure.</p>
           </div>
-          <div className="absolute right-0 top-0 h-full w-1/3 bg-blue-600/5 -skew-x-12 transform origin-bottom-left pointer-events-none" />
+
+          <div className="space-y-6 flex-1">
+            {STEPS.map((step, index) => {
+              const isActive = index === currentStep
+              const isCompleted = index < currentStep
+
+              return (
+                <div key={step.id} className="flex gap-4 relative">
+                  {/* Line connector */}
+                  {index !== STEPS.length - 1 && (
+                    <div className={`absolute left-[15px] top-[32px] bottom-[-24px] w-0.5 ${isCompleted ? 'bg-blue-600' : 'bg-slate-200'}`} />
+                  )}
+
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-colors duration-300 ${isActive ? 'border-blue-600 bg-blue-50 text-blue-600' :
+                    isCompleted ? 'border-blue-600 bg-blue-600 text-white' :
+                      'border-slate-200 text-slate-400'
+                    }`}>
+                    {isCompleted ? <CheckCircle2 size={16} /> : <span className="text-xs font-bold">{index + 1}</span>}
+                  </div>
+                  <div className={`pb-2 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-60'}`}>
+                    <h3 className={`font-semibold text-sm ${isActive ? 'text-blue-700' : 'text-slate-700'}`}>{step.title}</h3>
+                    <p className="text-xs text-slate-500">{step.description}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-slate-100">
+            <p className="text-sm text-slate-500">
+              Already have an account?{' '}
+              <a href="/login" className="text-blue-600 font-semibold hover:underline">
+                Sign in
+              </a>
+            </p>
+          </div>
         </motion.div>
 
-        {/* Right Form Area */}
+        {/* Right Side: Form Wizard */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-slate-200/50 p-10 md:p-14 relative overflow-hidden"
+          transition={{ delay: 0.1 }}
+          className="md:w-2/3 bg-white rounded-3xl border border-gray-200 shadow-xl p-8 md:p-10 flex flex-col relative overflow-hidden"
         >
-          <form onSubmit={handleSubmit} className="space-y-8 h-full flex flex-col justify-between">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-8"
-              >
-                {currentStep === 0 && (
-                  <div className="space-y-8">
-                    <div className="mb-2">
-                      <h2 className="text-3xl font-black text-slate-900 leading-none">Account Credentials</h2>
-                      <p className="text-slate-500 font-medium mt-3">Start by setting up your secure entrance</p>
-                    </div>
-
-                    <InputField
-                      label="Email Address"
-                      icon={Mail01Icon}
-                      type="email"
-                      name="email"
-                      placeholder="doctor@hospital.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      error={errors.email}
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="relative">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+            <div className="flex-1">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentStep}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-6"
+                >
+                  {currentStep === 0 && (
+                    <div className="space-y-5">
+                      <h2 className="text-xl font-bold text-slate-800 mb-4">Account Credentials</h2>
+                      <InputField
+                        label="Email Address"
+                        icon={Mail}
+                        type="email"
+                        name="email"
+                        placeholder="doctor@hospital.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        error={errors.email}
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <InputField
                           label="Password"
-                          icon={AccessIcon}
+                          icon={Lock}
                           type={showPassword ? 'text' : 'password'}
                           name="password"
-                          placeholder="8+ characters"
+                          placeholder="At least 8 characters"
                           value={formData.password}
                           onChange={handleChange}
                           error={errors.password}
                         />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword((prev) => !prev)}
-                          className="absolute right-4 top-[46px] text-slate-400 hover:text-blue-600 transition-colors p-1"
-                        >
-                          {showPassword ? <ViewOffIcon size={18} /> : <ViewIcon size={18} />}
-                        </button>
-                      </div>
-                      <div className="relative">
                         <InputField
                           label="Confirm Password"
-                          icon={AccessIcon}
+                          icon={Lock}
                           type={showConfirmPassword ? 'text' : 'password'}
                           name="confirmPassword"
                           placeholder="Repeat password"
@@ -361,273 +345,298 @@ const SignUpPage: React.FC = () => {
                           onChange={handleChange}
                           error={errors.confirmPassword}
                         />
+                      </div>
+
+                      <div className="flex gap-3 text-xs text-slate-500">
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          className="text-blue-600 font-semibold hover:underline"
+                        >
+                          {showPassword ? 'Hide password' : 'Show password'}
+                        </button>
                         <button
                           type="button"
                           onClick={() => setShowConfirmPassword((prev) => !prev)}
-                          className="absolute right-4 top-[46px] text-slate-400 hover:text-blue-600 transition-colors p-1"
+                          className="text-blue-600 font-semibold hover:underline"
                         >
-                          {showConfirmPassword ? <ViewOffIcon size={18} /> : <ViewIcon size={18} />}
+                          {showConfirmPassword ? 'Hide confirmation' : 'Show confirmation'}
                         </button>
                       </div>
-                    </div>
-                    <InputField
-                      label="Security PIN"
-                      icon={FingerPrintIcon}
-                      type="password"
-                      name="pin"
-                      placeholder="5-digit security PIN"
-                      maxLength={5}
-                      value={formData.pin}
-                      onChange={handleChange}
-                      error={errors.pin}
-                    />
-                  </div>
-                )}
 
-                {currentStep === 1 && (
-                  <div className="space-y-8">
-                    <div className="mb-2">
-                      <h2 className="text-3xl font-black text-slate-900 leading-none">Identity Details</h2>
-                      <p className="text-slate-500 font-medium mt-3">Help us verify your professional status</p>
-                    </div>
-
-                    <InputField
-                      label="Full Name"
-                      icon={UserIcon}
-                      type="text"
-                      name="fullName"
-                      placeholder="Dr. Jane Doe"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      error={errors.fullName}
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5 ml-1">Specialty</label>
-                        <select
-                          name="specialty"
-                          value={formData.specialty}
+                      <div className="pt-2 border-t border-slate-100">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Security PIN</label>
+                        <input
+                          type="password"
+                          name="pin"
+                          value={formData.pin}
                           onChange={handleChange}
-                          className="w-full rounded-2xl border border-slate-200 bg-slate-50/30 px-5 py-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
+                          maxLength={5}
+                          className={`w-full px-4 py-3 bg-gray-50/50 border ${errors.pin ? 'border-red-300' : 'border-gray-200'} rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none text-center tracking-[0.5em] text-lg font-mono`}
+                          placeholder="•••••"
+                        />
+                        {errors.pin ? (
+                          <p className="text-xs text-red-500 mt-1">{errors.pin}</p>
+                        ) : (
+                          <p className="text-xs text-slate-400 mt-1 text-center">5-digit numeric PIN for quick access</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 1 && (
+                    <div className="space-y-5">
+                      <h2 className="text-xl font-bold text-slate-800 mb-4">Identity Details</h2>
+                      <InputField
+                        label="Full Name"
+                        icon={User}
+                        type="text"
+                        name="fullName"
+                        placeholder="Dr. Jane Doe"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        error={errors.fullName}
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-1.5">Specialty</label>
+                          <select
+                            name="specialty"
+                            value={formData.specialty}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm text-slate-700"
+                          >
+                            <option value="">Select specialty</option>
+                            {specialties.map((spec) => (
+                              <option key={spec} value={spec}>
+                                {spec}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.specialty && <p className="text-xs text-red-500 mt-1">{errors.specialty}</p>}
+                        </div>
+                        <InputField
+                          label="Hospital or Clinic"
+                          icon={Building}
+                          type="text"
+                          name="hospitalName"
+                          placeholder="General Hospital Lagos"
+                          value={formData.hospitalName}
+                          onChange={handleChange}
+                          error={errors.hospitalName}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Institution Type</label>
+                        <select
+                          name="hospitalType"
+                          value={formData.hospitalType}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm text-slate-700"
                         >
-                          <option value="">Select specialty</option>
-                          {specialties.map((spec) => (
-                            <option key={spec} value={spec}>
-                              {spec}
+                          <option value="">Select type</option>
+                          {hospitalTypes.map((type) => (
+                            <option key={type} value={type}>
+                              {type}
                             </option>
                           ))}
                         </select>
-                        {errors.specialty && <p className="text-[10px] font-bold text-rose-600 mt-2 ml-1 uppercase tracking-wider">{errors.specialty}</p>}
+                        {errors.hospitalType && <p className="text-xs text-red-500 mt-1">{errors.hospitalType}</p>}
                       </div>
-                      <InputField
-                        label="Hospital or Clinic"
-                        icon={Hospital01Icon}
-                        type="text"
-                        name="hospitalName"
-                        placeholder="Institution Name"
-                        value={formData.hospitalName}
-                        onChange={handleChange}
-                        error={errors.hospitalName}
-                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5 ml-1">Institution Type</label>
-                      <select
-                        name="hospitalType"
-                        value={formData.hospitalType}
-                        onChange={handleChange}
-                        className="w-full rounded-2xl border border-slate-200 bg-slate-50/30 px-5 py-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
-                      >
-                        <option value="">Select type</option>
-                        {hospitalTypes.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.hospitalType && <p className="text-[10px] font-bold text-rose-600 mt-2 ml-1 uppercase tracking-wider">{errors.hospitalType}</p>}
-                    </div>
-                  </div>
-                )}
+                  )}
 
-                {currentStep === 2 && (
-                  <div className="space-y-8">
-                    <div className="mb-2">
-                      <h2 className="text-3xl font-black text-slate-900 leading-none">Professional Credentials</h2>
-                      <p className="text-slate-500 font-medium mt-3">Secure verification of your medical license</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <InputField
-                        label="License Number"
-                        icon={Shield01Icon}
-                        type="text"
-                        name="medicalLicenseNumber"
-                        placeholder="MDCN/2024/12345"
-                        value={formData.medicalLicenseNumber}
-                        onChange={handleChange}
-                        error={errors.medicalLicenseNumber}
-                      />
-                      <div>
-                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5 ml-1">Issuing Authority</label>
-                        <select
-                          name="issuingAuthority"
-                          value={formData.issuingAuthority}
+                  {currentStep === 2 && (
+                    <div className="space-y-5">
+                      <h2 className="text-xl font-bold text-slate-800 mb-4">Professional Credentials</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <InputField
+                          label="Medical License Number"
+                          icon={Shield}
+                          type="text"
+                          name="medicalLicenseNumber"
+                          placeholder="e.g., MDCN/2024/12345"
+                          value={formData.medicalLicenseNumber}
                           onChange={handleChange}
-                          className="w-full rounded-2xl border border-slate-200 bg-slate-50/30 px-5 py-4 text-sm font-medium focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
-                        >
-                          <option value="">Select authority</option>
-                          {issuingAuthorities.map((authority) => (
-                            <option key={authority} value={authority}>
-                              {authority}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.issuingAuthority && <p className="text-[10px] font-bold text-rose-600 mt-2 ml-1 uppercase tracking-wider">{errors.issuingAuthority}</p>}
+                          error={errors.medicalLicenseNumber}
+                        />
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-1.5">Issuing Authority</label>
+                          <select
+                            name="issuingAuthority"
+                            value={formData.issuingAuthority}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm text-slate-700"
+                          >
+                            <option value="">Select authority</option>
+                            {issuingAuthorities.map((authority) => (
+                              <option key={authority} value={authority}>
+                                {authority}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.issuingAuthority && <p className="text-xs text-red-500 mt-1">{errors.issuingAuthority}</p>}
+                        </div>
                       </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <InputField
-                        label="Exp. Years (optional)"
-                        icon={Calendar01Icon}
-                        type="number"
-                        min={0}
-                        name="yearsExperience"
-                        placeholder="Years"
-                        value={formData.yearsExperience}
-                        onChange={handleChange}
-                      />
-                      <InputField
-                        label="License Expiry"
-                        icon={Calendar01Icon}
-                        type="date"
-                        name="licenseExpiryDate"
-                        value={formData.licenseExpiryDate}
-                        onChange={handleChange}
-                        error={errors.licenseExpiryDate}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5 ml-1">Verification Document (PDF/Image)</label>
-                      <div className="relative group">
-                        <Upload01Icon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <InputField
+                          label="Years of Experience (optional)"
+                          icon={Calendar}
+                          type="number"
+                          min={0}
+                          name="yearsExperience"
+                          placeholder="e.g., 8"
+                          value={formData.yearsExperience}
+                          onChange={handleChange}
+                        />
+                        <InputField
+                          label="License Expiry Date"
+                          icon={Calendar}
+                          type="date"
+                          name="licenseExpiryDate"
+                          value={formData.licenseExpiryDate}
+                          onChange={handleChange}
+                          error={errors.licenseExpiryDate}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-2">
+                          <FileUp size={18} />
+                          Verification Document (PDF/Image)
+                        </label>
                         <input
                           type="file"
                           accept=".pdf,image/*"
                           onChange={handleDocumentUpload}
-                          className="w-full rounded-2xl border border-slate-200 bg-slate-50/30 px-5 py-4 pl-12 text-sm font-medium focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
+                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none text-sm text-slate-700"
                         />
+                        {verificationDocument && (
+                          <p className="text-xs text-slate-500 mt-1">Uploaded: {verificationDocument.name}</p>
+                        )}
+                        {errors.verificationDocument && <p className="text-xs text-red-500 mt-1">{errors.verificationDocument}</p>}
                       </div>
-                      {verificationDocument && (
-                        <p className="text-[10px] font-bold text-emerald-600 mt-2 ml-1 uppercase tracking-wider">Ready to upload: {verificationDocument.name}</p>
-                      )}
-                      {errors.verificationDocument && <p className="text-[10px] font-bold text-rose-600 mt-2 ml-1 uppercase tracking-wider">{errors.verificationDocument}</p>}
+                      <InputField
+                        label="National Identity Number (NIN)"
+                        icon={Fingerprint}
+                        type="text"
+                        name="nin"
+                        placeholder="11-digit NIN"
+                        value={formData.nin}
+                        maxLength={11}
+                        onChange={handleChange}
+                        error={errors.nin}
+                      />
                     </div>
-                    <InputField
-                      label="National ID (NIN)"
-                      icon={FingerPrintIcon}
-                      type="text"
-                      name="nin"
-                      placeholder="11-digit NIN"
-                      value={formData.nin}
-                      maxLength={11}
-                      onChange={handleChange}
-                      error={errors.nin}
-                    />
-                  </div>
-                )}
+                  )}
 
-                {currentStep === 3 && (
-                  <div className="space-y-8">
-                    <div className="mb-2">
-                      <h2 className="text-3xl font-black text-slate-900 leading-none">Consent & Review</h2>
-                      <p className="text-slate-500 font-medium mt-3">Final confirmation of our secure protocols</p>
+                  {currentStep === 3 && (
+                    <div className="space-y-6">
+                      <h2 className="text-xl font-bold text-slate-800 mb-4">Consent & Review</h2>
+                      <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6 space-y-4">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-white p-2 rounded-lg shadow-sm text-blue-600">
+                            <Shield size={20} />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-slate-800 text-sm">Terms of Service</h4>
+                            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                              I agree to the MEDBLOCK Terms of Service and professional conduct policy.
+                            </p>
+                            <label className="flex items-center gap-3 mt-3 cursor-pointer group">
+                              <input
+                                type="checkbox"
+                                name="acceptTerms"
+                                checked={formData.acceptTerms}
+                                onChange={(e) => setFormData(prev => ({ ...prev, acceptTerms: e.target.checked }))}
+                                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all"
+                              />
+                              <span className={`text-sm font-medium transition-colors ${formData.acceptTerms ? 'text-blue-700' : 'text-slate-600 group-hover:text-slate-900'}`}>I agree to the Terms of Service</span>
+                            </label>
+                            {errors.acceptTerms && <p className="text-xs text-red-500 mt-1 font-semibold">{errors.acceptTerms}</p>}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-px bg-blue-200/50"></div>
+
+                        <div className="flex items-start gap-4">
+                          <div className="bg-white p-2 rounded-lg shadow-sm text-blue-600">
+                            <Shield size={20} />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-slate-800 text-sm">Data Processing Consent</h4>
+                            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                              I consent to secure processing and hashing of my identity and credential data on MEDBLOCK.
+                            </p>
+                            <label className="flex items-center gap-3 mt-3 cursor-pointer group">
+                              <input
+                                type="checkbox"
+                                name="acceptData"
+                                checked={formData.acceptData}
+                                onChange={(e) => setFormData(prev => ({ ...prev, acceptData: e.target.checked }))}
+                                className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all"
+                              />
+                              <span className={`text-sm font-medium transition-colors ${formData.acceptData ? 'text-blue-700' : 'text-slate-600 group-hover:text-slate-900'}`}>I consent to data processing</span>
+                            </label>
+                            {errors.acceptData && <p className="text-xs text-red-500 mt-1 font-semibold">{errors.acceptData}</p>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="px-4 py-3 bg-amber-50 rounded-xl border border-amber-100 flex gap-3 text-amber-800 text-[11px]">
+                        <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+                        <p>Uploaded documents are encrypted and hashed on Cardano. Verification alerts will be sent once processed.</p>
+                      </div>
                     </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-                    <div className="space-y-4">
-                      <label className="flex items-start gap-4 p-6 bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-100 rounded-[2rem] cursor-pointer transition-all duration-300">
-                        <input
-                          type="checkbox"
-                          name="acceptTerms"
-                          checked={formData.acceptTerms}
-                          onChange={(e) => setFormData(prev => ({ ...prev, acceptTerms: e.target.checked }))}
-                          className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 transition-all"
-                        />
-                        <span className="text-sm font-medium text-slate-700 leading-relaxed">
-                          I agree to the MEDBLOCK <span className="text-blue-600 font-bold">Terms of Service</span> and professional conduct policy.
-                        </span>
-                      </label>
-                      {errors.acceptTerms && <p className="text-[10px] font-bold text-rose-600 ml-1 uppercase tracking-wider">{errors.acceptTerms}</p>}
-
-                      <label className="flex items-start gap-4 p-6 bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-100 rounded-[2rem] cursor-pointer transition-all duration-300">
-                        <input
-                          type="checkbox"
-                          name="acceptData"
-                          checked={formData.acceptData}
-                          onChange={(e) => setFormData(prev => ({ ...prev, acceptData: e.target.checked }))}
-                          className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 transition-all"
-                        />
-                        <span className="text-sm font-medium text-slate-700 leading-relaxed">
-                          I consent to secure processing and hashing of my identity data on the <span className="text-blue-600 font-bold">blockchain</span>.
-                        </span>
-                      </label>
-                      {errors.acceptData && <p className="text-[10px] font-bold text-rose-600 ml-1 uppercase tracking-wider">{errors.acceptData}</p>}
-                    </div>
-
-                    <div className="p-6 bg-amber-50/50 rounded-[2rem] border border-amber-100/50 flex gap-4 text-amber-900 text-xs font-medium leading-relaxed">
-                      <AlertCircleIcon size={20} className="flex-shrink-0 text-amber-600" />
-                      Verification documents are encrypted. Approval codes will be sent to your registered email.
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-
-            <div className="flex justify-between items-center pt-12">
+            <div className="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
               <button
                 type="button"
                 onClick={handleBack}
                 disabled={currentStep === 0 || isSubmitting}
-                className={`flex items-center gap-2 px-6 py-4 rounded-2xl text-sm font-bold transition-all ${currentStep === 0 ? 'text-slate-300 cursor-not-allowed opacity-0' : 'text-slate-600 hover:bg-slate-50'}`}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-colors ${currentStep === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
               >
-                <ArrowLeft01Icon size={18} /> Back
+                <ArrowLeft size={16} /> Back
               </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-10 py-4 rounded-2xl bg-blue-600 text-white font-black text-sm shadow-xl shadow-blue-500/20 flex items-center gap-3 transition-all hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed group"
-              >
-                {currentStep < STEPS.length - 1 ? (
-                  <>
-                    Next Step <ArrowRight01Icon size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </>
-                ) : isSubmitting ? (
-                  <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Shield01Icon size={20} />
-                    </motion.div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    Complete Registration <ArrowRight01Icon size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
+
+              {currentStep === STEPS.length - 1 ? (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Creating account...
+                    </>
+                  ) : (
+                    <>
+                      Complete Registration <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-bold shadow-lg shadow-slate-900/10 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 group"
+                >
+                  Next Step <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                </button>
+              )}
             </div>
           </form>
 
-          <div className="mt-8 text-center lg:hidden">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-              Need a patient account instead?{' '}
-              <a href={`${PORTAL_URLS.PATIENT}/register`} className="text-blue-600 hover:underline">
-                Switch to patient signup
-              </a>
-            </p>
-          </div>
+          <p className="text-xs text-slate-400 mt-6 text-center">
+            Need a patient account instead?{' '}
+            <a href={`${PORTAL_URLS.PATIENT}/register`} className="text-blue-600 font-semibold hover:underline">
+              Switch to patient signup
+            </a>
+          </p>
         </motion.div>
       </div>
     </div>
