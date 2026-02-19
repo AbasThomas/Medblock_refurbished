@@ -44,8 +44,13 @@ class ApiService {
         hospitalName: string
         hospitalType: string
         specialty: string
-        licenseNumber?: string
         password: string
+        nin?: string
+        pin?: string
+        medicalLicenseNumber?: string
+        yearsExperience?: string
+        issuingAuthority?: string
+        licenseExpiryDate?: string
     }) => {
         const response = await this.client.post('/identity/practitioner/request-otp', data)
         return response.data
@@ -205,7 +210,20 @@ class ApiService {
         return response.data
     }
 
-    resendProviderOtp = async (data: any) => {
+    resendProviderOtp = async (data: {
+        fullName: string
+        email: string
+        hospitalName: string
+        hospitalType: string
+        specialty: string
+        password: string
+        nin?: string
+        pin?: string
+        medicalLicenseNumber?: string
+        yearsExperience?: string
+        issuingAuthority?: string
+        licenseExpiryDate?: string
+    }) => {
         const response = await this.client.post('/identity/practitioner/resend-otp', data)
         return response.data
     }
@@ -231,8 +249,13 @@ export const requestProviderOtp = (data: {
     hospitalName: string
     hospitalType: string
     specialty: string
-    licenseNumber?: string
     password: string
+    nin?: string
+    pin?: string
+    medicalLicenseNumber?: string
+    yearsExperience?: string
+    issuingAuthority?: string
+    licenseExpiryDate?: string
 }) => apiService.requestProviderOtp(data)
 
 export const resendProviderOtp = (data: {
@@ -241,8 +264,13 @@ export const resendProviderOtp = (data: {
     hospitalName: string
     hospitalType: string
     specialty: string
-    licenseNumber?: string
     password: string
+    nin?: string
+    pin?: string
+    medicalLicenseNumber?: string
+    yearsExperience?: string
+    issuingAuthority?: string
+    licenseExpiryDate?: string
 }) => apiService.resendProviderOtp(data)
 
 export const requestPasswordReset = (email: string) => apiService.requestPasswordReset(email)

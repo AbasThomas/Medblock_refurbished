@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../App'
 import { apiService } from '../services/api'
-import favicon from '../../../shared/logo.png'
 import {
     UserGroupIcon,
     File01Icon,
@@ -14,7 +13,8 @@ import {
     Search01Icon,
     Upload01Icon,
     Shield01Icon,
-    TrendingUpIcon,
+    ChartLineData01Icon,
+    ArtificialIntelligence01Icon
 } from 'hugeicons-react'
 
 const containerVariants: Variants = {
@@ -22,7 +22,7 @@ const containerVariants: Variants = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1
+            staggerChildren: 0.05
         }
     }
 }
@@ -34,7 +34,8 @@ const itemVariants: Variants = {
         opacity: 1,
         transition: {
             type: "spring",
-            stiffness: 100
+            stiffness: 100,
+            damping: 15
         }
     }
 }
@@ -73,7 +74,6 @@ export default function Dashboard() {
                     setDashboardStats(prev => ({
                         ...prev,
                         ...data,
-                        // Ensure systemStatus is preserved or merged if partial data comes back
                         systemStatus: {
                             ...prev.systemStatus,
                             ...(data.systemStatus || {})
@@ -87,81 +87,105 @@ export default function Dashboard() {
         fetchStats()
     }, [])
 
-    // Real-time stats fetched from API
     const stats = [
         {
             title: 'Active Patients',
             value: dashboardStats.activePatients.toString(),
-            change: 'Total patients in system',
             icon: UserGroupIcon,
-            color: 'bg-blue-500'
+            color: 'text-blue-600',
+            bg: 'bg-blue-50'
         },
         {
             title: 'Records Uploaded',
             value: dashboardStats.recordsUploaded.toString(),
-            change: 'Medical records stored',
             icon: File01Icon,
-            color: 'bg-emerald-500'
+            color: 'text-emerald-600',
+            bg: 'bg-emerald-50'
         },
         {
             title: 'Pending Requests',
             value: dashboardStats.pendingRequests.toString(),
-            change: 'Consent requests pending',
             icon: Clock01Icon,
-            color: 'bg-amber-500'
+            color: 'text-amber-600',
+            bg: 'bg-amber-50'
         },
         {
             title: 'Interoperability',
             value: dashboardStats.interoperabilityCount.toString(),
-            change: 'Connected systems',
             icon: Activity01Icon,
-            color: 'bg-indigo-500'
+            color: 'text-indigo-600',
+            bg: 'bg-indigo-50'
         },
     ]
-
-    const handleSearchPatients = () => {
-        navigate('/patients/search')
-    }
-
-    const handleUploadRecords = () => {
-        // Navigate to first patient or show message
-        navigate('/patients/search')
-    }
-
-    const handleRequestConsent = () => {
-        navigate('/patients/search')
-    }
 
     return (
         <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-8"
+            className="space-y-12"
         >
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <h1 className="text-2xl font-bold text-[#20305B]">MEDBLOCK</h1>
-                    <img src={favicon} alt="MEDBLOCK" className="h-20 w-20 object-contain" />
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-3"
+                    >
+                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-ping"></div>
+                        Live Network Status: Synchronized
+                    </motion.div>
+                    <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                        Command Overview
+                    </h1>
                 </div>
-                <span className="hidden md:block text-xs text-gray-500 font-medium tracking-wider">
-                    NIGERIA'S BLOCKCHAIN EMR INFRASTRUCTURE
-                </span>
+                <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm">
+                    <div className="flex -space-x-3">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="w-10 h-10 rounded-xl border-4 border-white bg-slate-100 flex items-center justify-center font-black text-xs text-slate-400">
+                                {String.fromCharCode(64 + i)}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="pr-4 py-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Practitioners</p>
+                        <p className="text-xs font-bold text-slate-900">12 Online in Network</p>
+                    </div>
+                </div>
             </div>
-            {/* Welcome Section */}
+
+            {/* Welcome Banner */}
             <motion.div
                 variants={itemVariants}
-                className="bg-slate-900 rounded-[2.5rem] p-10 md:p-14 text-white shadow-xl relative overflow-hidden"
+                className="bg-slate-900 rounded-[2.5rem] p-10 md:p-16 text-white shadow-2xl relative overflow-hidden group"
             >
                 <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-6">
-                        <Activity01Icon size={16} />
-                        Command Center Active
+                    <div className="inline-flex items-center gap-2 rounded-xl bg-blue-500/10 border border-blue-500/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-8 transition-transform group-hover:scale-105">
+                        <ArtificialIntelligence01Icon size={18} />
+                        Blockchain EMR Activated
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Welcome back, {providerName || 'Doctor'}.</h1>
-                    <p className="text-slate-400 text-xl leading-relaxed font-medium">Access clinical insights and manage patient data with blockchain security.</p>
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">
+                        Welcome back, <br />
+                        <span className="text-blue-500">{providerName || 'Physician'}</span>.
+                    </h1>
+                    <p className="text-slate-400 text-lg md:text-xl leading-relaxed font-medium max-w-lg">
+                        Your clinical workspace is secured by <span className="text-white font-bold">End-to-End Cryptography</span>. Access real-time patient insights now.
+                    </p>
                 </div>
-                <div className="absolute right-0 top-0 h-full w-1/3 bg-blue-600/10 -skew-x-12 transform origin-bottom-left" />
+
+                <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-blue-600/10 to-transparent pointer-events-none" />
+                <div className="absolute -right-20 -top-20 w-96 h-96 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
+                <motion.div
+                    animate={{
+                        opacity: [0.3, 0.6, 0.3],
+                        scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 8, repeat: Infinity }}
+                    className="absolute right-20 bottom-10 p-10 bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/10 hidden lg:block"
+                >
+                    <Activity01Icon size={80} className="text-blue-500/40" />
+                </motion.div>
             </motion.div>
 
             {/* Stats Grid */}
@@ -170,202 +194,146 @@ export default function Dashboard() {
                     <motion.div
                         key={index}
                         variants={itemVariants}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        className="h-full w-full bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-lg hover:border-slate-200 transition-all duration-300"
+                        whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.1)" }}
+                        className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 transition-all duration-300 group"
                     >
-                        <div className="flex items-center justify-between mb-6">
-                            <div className={`p-4 rounded-xl ${stat.color} bg-opacity-10 transition-transform group-hover:scale-110`}>
-                                <stat.icon size={28} className={stat.color.replace('bg-', 'text-')} />
+                        <div className="flex items-center justify-between mb-8">
+                            <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color} transition-transform group-hover:scale-110 group-hover:rotate-3`}>
+                                <stat.icon size={28} />
                             </div>
+                            <ChartLineData01Icon size={20} className="text-slate-200" />
                         </div>
-                        <h3 className="text-3xl font-extrabold text-slate-900 mb-1">{stat.value}</h3>
-                        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{stat.title}</p>
+                        <h3 className="text-4xl font-black text-slate-900 mb-1 tracking-tight">{stat.value}</h3>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.title}</p>
                     </motion.div>
                 ))}
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Getting Started */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Operations */}
                 <motion.div
                     variants={itemVariants}
-                    className="lg:col-span-2 h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+                    className="lg:col-span-2 space-y-8"
                 >
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-lg font-bold text-gray-900">Getting Started</h2>
-                        <TrendingUp className="w-5 h-5 text-blue-600" />
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Clinical Operations</h2>
+                        <div className="h-px flex-1 bg-slate-100 mx-6 hidden sm:block" />
+                        <button className="text-[10px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 transition-colors">View All Tasks</button>
                     </div>
-                    <div className="space-y-4">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
-                        >
-                            <div className="p-3 rounded-xl bg-blue-600/10 text-blue-600">
-                                <Search01Icon size={24} />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-slate-900 mb-1">Search for Patients</h3>
-                                <p className="text-sm text-slate-500 mb-4">Find patients by their DID or wallet address to access their medical records.</p>
-                                <button
-                                    onClick={handleSearchPatients}
-                                    className="text-sm text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1 group"
-                                >
-                                    Start Searching <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
-                                </button>
-                            </div>
-                        </motion.div>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
-                        >
-                            <div className="p-3 rounded-xl bg-emerald-600/10 text-emerald-600">
-                                <File01Icon size={24} />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-slate-900 mb-1">Upload Medical Records</h3>
-                                <p className="text-sm text-slate-500 mb-4">Add new observations, diagnoses, and medical records to the blockchain.</p>
+                    <div className="grid grid-cols-1 gap-4">
+                        {[
+                            {
+                                title: 'Search for Patients',
+                                desc: 'Find patients by DID or wallet address for record access.',
+                                icon: Search01Icon,
+                                color: 'text-blue-600',
+                                bg: 'bg-blue-50',
+                                action: () => navigate('/patients/search'),
+                                btn: 'Execute Search'
+                            },
+                            {
+                                title: 'Upload Medical Records',
+                                desc: 'Commit new clinical observations to the blockchain.',
+                                icon: Upload01Icon,
+                                color: 'text-emerald-600',
+                                bg: 'bg-emerald-50',
+                                action: () => navigate('/patients/search'),
+                                btn: 'Push to Chain'
+                            },
+                            {
+                                title: 'Request Patient Consent',
+                                desc: 'Establish verifiable consent bridges for data access.',
+                                icon: Shield01Icon,
+                                color: 'text-indigo-600',
+                                bg: 'bg-indigo-50',
+                                action: () => navigate('/patients/search'),
+                                btn: 'Bridge Consent'
+                            }
+                        ].map((op, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ x: 10 }}
+                                className="flex flex-col sm:flex-row sm:items-center gap-6 p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all group"
+                            >
+                                <div className={`p-5 rounded-[1.5rem] ${op.bg} ${op.color} group-hover:scale-110 transition-transform`}>
+                                    <op.icon size={32} />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-black text-slate-900 mb-1">{op.title}</h3>
+                                    <p className="text-sm font-medium text-slate-500">{op.desc}</p>
+                                </div>
                                 <button
-                                    onClick={handleUploadRecords}
-                                    className="text-sm text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1 group"
+                                    onClick={op.action}
+                                    className={`px-6 py-3 rounded-xl ${op.bg} ${op.color} font-black text-[10px] uppercase tracking-widest hover:brightness-95 transition-all active:scale-95`}
                                 >
-                                    Upload Records <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
+                                    {op.btn}
                                 </button>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="flex items-start gap-5 p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all"
-                        >
-                            <div className="p-3 rounded-xl bg-indigo-600/10 text-indigo-600">
-                                <Shield01Icon size={24} />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-bold text-slate-900 mb-1">Request Patient Consent</h3>
-                                <p className="text-sm text-slate-500 mb-4">Request access to patient records with blockchain-verified consent.</p>
-                                <button
-                                    onClick={handleRequestConsent}
-                                    className="text-sm text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1 group"
-                                >
-                                    Request Access <ArrowRight01Icon size={16} className="transition-transform group-hover:translate-x-1" />
-                                </button>
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                        ))}
                     </div>
                 </motion.div>
 
-                {/* Quick Actions */}
+                {/* System & Actions Side */}
                 <motion.div
                     variants={itemVariants}
-                    className="h-full w-full bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+                    className="space-y-8"
                 >
-                    <h2 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h2>
-                    <div className="space-y-3">
-                        <motion.button
-                            onClick={handleSearchPatients}
-                            whileHover={{ scale: 1.02, x: 2 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-blue-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
-                        >
-                            <div className="flex items-center gap-3">
-                                <Search01Icon size={22} />
-                                <span className="font-bold">Search Patients</span>
-                            </div>
-                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-blue-600 transition-all group-hover:translate-x-1" />
-                        </motion.button>
+                    <h2 className="text-2xl font-black text-slate-900 tracking-tight">Infrastructure</h2>
 
-                        <motion.button
-                            onClick={handleUploadRecords}
-                            whileHover={{ scale: 1.02, x: 2 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-emerald-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
-                        >
-                            <div className="flex items-center gap-3">
-                                <Upload01Icon size={22} />
-                                <span className="font-bold">Upload Records</span>
+                    <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 space-y-8">
+                        {/* Status List */}
+                        <div className="space-y-6">
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Real-time Systems</h3>
+                            <div className="space-y-4">
+                                {[
+                                    { name: 'Cardano Node', status: dashboardStats?.systemStatus?.blockchain, active: 'Connected' },
+                                    { name: 'FHIR API', status: dashboardStats?.systemStatus?.fhirApi, active: 'Active' },
+                                    { name: 'Identity Service', status: dashboardStats?.systemStatus?.didService, active: 'Online' }
+                                ].map((sys, i) => (
+                                    <div key={i} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/50">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-2 h-2 rounded-full ${sys.status === sys.active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                                            <span className="text-xs font-bold text-slate-700">{sys.name}</span>
+                                        </div>
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${sys.status === sys.active ? 'text-emerald-600' : 'text-rose-600'}`}>
+                                            {sys.status || 'Offline'}
+                                        </span>
+                                    </div>
+                                ))}
                             </div>
-                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-emerald-600 transition-all group-hover:translate-x-1" />
-                        </motion.button>
+                        </div>
 
-                        <motion.button
-                            onClick={handleRequestConsent}
-                            whileHover={{ scale: 1.02, x: 2 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-indigo-600 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
-                        >
-                            <div className="flex items-center gap-3">
-                                <Shield01Icon size={22} />
-                                <span className="font-bold">Request Consent</span>
-                            </div>
-                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-indigo-600 transition-all group-hover:translate-x-1" />
-                        </motion.button>
-
-                        <motion.button
-                            onClick={() => navigate('/interoperability')}
-                            whileHover={{ scale: 1.02, x: 2 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-between p-4 bg-slate-50 text-slate-700 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
-                        >
-                            <div className="flex items-center gap-3">
-                                <Activity01Icon size={22} />
-                                <span className="font-bold">Interoperability</span>
-                            </div>
-                            <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-slate-700 transition-all group-hover:translate-x-1" />
-                        </motion.button>
+                        {/* Quick Nav */}
+                        <div className="space-y-4 pt-8 border-t border-slate-50">
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Interoperability</h3>
+                            <button
+                                onClick={() => navigate('/interoperability')}
+                                className="w-full flex items-center justify-between p-5 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all group"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <Activity01Icon size={20} />
+                                    <span className="text-xs font-black uppercase tracking-widest">Cross-Chain Sync</span>
+                                </div>
+                                <ArrowRight01Icon size={18} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </div>
                     </div>
 
-                    {/* System Status */}
-                    <div className="mt-8 pt-6 border-t border-gray-200">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-4">System Status</h3>
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">Blockchain</span>
-                                <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full animate-pulse ${dashboardStats?.systemStatus?.blockchain === 'Connected' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                                    <span className={`text-xs font-medium ${dashboardStats?.systemStatus?.blockchain === 'Connected' ? 'text-green-600' : 'text-yellow-600'}`}>{dashboardStats?.systemStatus?.blockchain || 'Unknown'}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">FHIR API</span>
-                                <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full animate-pulse ${dashboardStats?.systemStatus?.fhirApi === 'Active' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                                    <span className={`text-xs font-medium ${dashboardStats?.systemStatus?.fhirApi === 'Active' ? 'text-green-600' : 'text-yellow-600'}`}>{dashboardStats?.systemStatus?.fhirApi || 'Unknown'}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">DID Service</span>
-                                <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full animate-pulse ${dashboardStats?.systemStatus?.didService === 'Online' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                                    <span className={`text-xs font-medium ${dashboardStats?.systemStatus?.didService === 'Online' ? 'text-green-600' : 'text-yellow-600'}`}>{dashboardStats?.systemStatus?.didService || 'Unknown'}</span>
-                                </div>
-                            </div>
+                    {/* Security Badge */}
+                    <div className="bg-emerald-50 border border-emerald-100 rounded-[2rem] p-8 flex gap-5">
+                        <div className="p-4 bg-white rounded-2xl text-emerald-600 shadow-sm h-fit">
+                            <Shield01Icon size={32} />
+                        </div>
+                        <div>
+                            <h4 className="font-black text-slate-900 tracking-tight mb-2">Immutable Protocol</h4>
+                            <p className="text-xs font-medium text-slate-600 leading-relaxed">
+                                Authorized by Cardano blockchain. Your clinical actions are audit-compliant and cryptographically signed.
+                            </p>
                         </div>
                     </div>
                 </motion.div>
             </div>
-
-            {/* Info Banner */}
-            <motion.div
-                variants={itemVariants}
-                className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4"
-            >
-                <div className="p-3 bg-blue-100 rounded-xl flex-shrink-0">
-                    <AlertCircle className="w-8 h-8 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 mb-2">Blockchain-Secured Healthcare</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                        All patient records are secured on the Cardano blockchain with FHIR R4 compliance.
-                        Every action is immutable, transparent, and verifiable.
-                    </p>
-                </div>
-            </motion.div>
         </motion.div>
     )
 }
-

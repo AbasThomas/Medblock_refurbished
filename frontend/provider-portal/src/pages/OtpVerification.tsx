@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { verifyOtpAndCreateProvider } from '../services/api';
-import { Mail, ShieldCheck, RefreshCcw, ArrowLeft } from 'lucide-react';
+import { Shield01Icon, Refresh01Icon, ArrowLeft01Icon } from 'hugeicons-react';
 import BackgroundLayer from '@/components/BackgroundLayer';
 import { AuthContext } from '../App';
 import { addRecentProvider } from '../utils/storage';
+import { motion } from 'framer-motion';
 
 interface LocationState {
     email: string;
@@ -158,28 +159,29 @@ const OtpVerification: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen relative overflow-hidden py-10 px-4 flex items-center justify-center">
+        <div className="min-h-screen relative overflow-hidden py-16 px-6 flex items-center justify-center bg-[#f8fafc]">
             <BackgroundLayer />
-            <div className="max-w-2xl w-full z-10">
-                <div className="text-center mb-8">
-                    <div className="flex items-center justify-center mb-4">
-                        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                            <Mail size={32} className="text-white" />
-                        </div>
-                    </div>
-                    <h1 className="text-3xl font-bold text-gray-900">Verify Your Email</h1>
-                    <p className="text-gray-600 mt-2">
-                        We sent a 6-digit code to <span className="font-semibold text-blue-700">{email}</span>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-md w-full z-10"
+            >
+                <div className="text-center mb-10">
+                    <img src={require('../../../shared/logo.png')} alt="MEDBLOCK" className="w-20 h-20 object-contain mx-auto mb-6 bg-white border border-slate-100 p-3 rounded-[2rem] shadow-sm" />
+                    <h1 className="text-4xl font-black text-slate-900 leading-tight">Verify Identity</h1>
+                    <p className="text-slate-500 font-medium mt-3">
+                        Enter the 6-digit code sent to <br />
+                        <span className="font-bold text-blue-600 lowercase">{email}</span>
                     </p>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
-                    <div className="flex items-center gap-2 mb-6">
-                        <ShieldCheck className="w-5 h-5 text-green-600" />
-                        <p className="text-sm text-gray-600">Secure identity verification</p>
+                <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 p-10 border border-slate-100">
+                    <div className="flex items-center gap-3 mb-8 bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50">
+                        <Shield01Icon className="w-5 h-5 text-blue-600" />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-700">Secure blockchain verification</p>
                     </div>
 
-                    <div className="flex items-center justify-center gap-3 mb-6" onPaste={handlePaste}>
+                    <div className="flex items-center justify-center gap-2.5 mb-8" onPaste={handlePaste}>
                         {otp.map((digit, index) => (
                             <input
                                 key={index}
@@ -190,7 +192,10 @@ const OtpVerification: React.FC = () => {
                                 value={digit}
                                 onChange={(e) => handleChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
-                                className={`w-12 h-14 text-center text-xl font-semibold rounded-xl border ${error ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-gray-50'} focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all`}
+                                className={`w-full h-14 text-center text-xl font-black rounded-2xl border transition-all duration-200 outline-none ${error
+                                    ? 'border-rose-200 bg-rose-50 text-rose-600'
+                                    : 'border-slate-200 bg-slate-50/50 text-slate-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:bg-white'
+                                    }`}
                                 disabled={loading}
                                 autoFocus={index === 0}
                             />
@@ -198,59 +203,63 @@ const OtpVerification: React.FC = () => {
                     </div>
 
                     {error && (
-                        <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
-                            <span className="inline-block w-2 h-2 bg-red-500 rounded-full"></span>
-                            <span className="text-sm">{error}</span>
-                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center gap-3 text-rose-700 bg-rose-50 border border-rose-100 rounded-2xl p-4 mb-8"
+                        >
+                            <div className="w-1.5 h-1.5 bg-rose-500 rounded-full animate-pulse"></div>
+                            <span className="text-xs font-bold uppercase tracking-wider">{error}</span>
+                        </motion.div>
                     )}
 
                     <button
                         onClick={() => handleVerify()}
                         disabled={loading || otp.join('').length !== 6}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-semibold hover:shadow-lg active:scale-[0.98] transition-all duration-200"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed group"
                     >
-                        {loading ? 'Verifying...' : 'Verify & Continue'}
+                        {loading ? 'Verifying...' : 'Verify & Complete Account'}
                     </button>
 
-                    <div className="text-center mt-6">
-                        <p className="text-gray-600 mb-4">
+                    <div className="text-center mt-10">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
                             Didn't receive the code?
                         </p>
                         <button
                             onClick={handleResend}
                             disabled={timeLeft > 0 || resending}
-                            className={`flex items-center justify-center space-x-2 mx-auto ${timeLeft > 0 || resending
-                                ? 'text-gray-400 cursor-not-allowed'
-                                : 'text-blue-600 hover:text-blue-700'
+                            className={`flex items-center justify-center gap-2 mx-auto text-xs font-black transition-all ${timeLeft > 0 || resending
+                                ? 'text-slate-300 cursor-not-allowed'
+                                : 'text-blue-600 hover:text-blue-800'
                                 }`}
                         >
-                            <RefreshCcw className={`w-4 h-4 ${resending ? 'animate-spin' : ''}`} />
-                            <span>
+                            <Refresh01Icon size={16} className={`${resending ? 'animate-spin' : ''}`} />
+                            <span className="uppercase tracking-widest">
                                 {resending
                                     ? 'Resending...'
                                     : timeLeft > 0
-                                        ? `Resend in ${formatTime(timeLeft)}`
+                                        ? `Wait ${formatTime(timeLeft)}`
                                         : 'Resend Code'}
                             </span>
                         </button>
                     </div>
 
                     {devOtp && (
-                        <div className="mt-4 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-3">
-                            <p className="font-semibold">Developer Mode</p>
-                            <p>Your temporary OTP is <span className="font-mono font-bold">{devOtp}</span>. This appears because email delivery is not configured.</p>
+                        <div className="mt-8 text-[10px] font-bold text-amber-900 bg-amber-50 border border-amber-100 rounded-2xl p-5">
+                            <p className="uppercase tracking-[0.2em] mb-2 text-amber-600">Developer Bridge</p>
+                            <p className="leading-relaxed">Temporary OTP: <span className="font-black text-xs text-amber-900">{devOtp}</span>. Email delivery is disabled in this environment.</p>
                         </div>
                     )}
 
                     <button
                         onClick={() => navigate('/signup')}
-                        className="mt-6 inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
+                        className="mt-10 w-full flex items-center justify-center gap-2 text-slate-400 hover:text-slate-900 text-[10px] font-black uppercase tracking-widest transition-all group"
                     >
-                        <ArrowLeft className="w-4 h-4" /> Back to Sign Up
+                        <ArrowLeft01Icon size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Sign Up
                     </button>
                 </div>
-            </div>
-        </div >
+            </motion.div>
+        </div>
     );
 };
 

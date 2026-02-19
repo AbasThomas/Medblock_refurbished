@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
-    LayoutDashboard,
-    Search,
-    Users,
-    Share2,
-    Activity,
-    User,
-    LogOut,
-    ChevronLeft,
-    X
-} from 'lucide-react'
+    DashboardSquare01Icon,
+    Search01Icon,
+    UserGroupIcon,
+    Share01Icon,
+    Activity01Icon,
+    UserIcon,
+    Logout01Icon,
+    ArrowLeft01Icon,
+    Cancel01Icon,
+} from 'hugeicons-react'
 import logo from '../../../shared/logo.png';
 import { motion, AnimatePresence } from 'framer-motion'
 import { useContext } from 'react'
@@ -44,12 +44,12 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
     }
 
     const navigation = [
-        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-        { name: 'My Patients', href: '/my-patients', icon: Users },
-        { name: 'Patient Search', href: '/patients/search', icon: Search },
-        { name: 'Interoperability', href: '/interoperability', icon: Share2 },
-        { name: 'Audit Logs', href: '/audit-logs', icon: Activity },
-        { name: 'Profile', href: '/profile', icon: User },
+        { name: 'Dashboard', href: '/dashboard', icon: DashboardSquare01Icon },
+        { name: 'My Patients', href: '/my-patients', icon: UserGroupIcon },
+        { name: 'Patient Search', href: '/patients/search', icon: Search01Icon },
+        { name: 'Interoperability', href: '/interoperability', icon: Share01Icon },
+        { name: 'Audit Logs', href: '/audit-logs', icon: Activity01Icon },
+        { name: 'Profile', href: '/profile', icon: UserIcon },
     ]
 
     const shortId = (value?: string) => {
@@ -61,14 +61,14 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
     const sidebarContent = (
         <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="h-20 flex items-center justify-between px-4 border-b border-gray-100">
+            <div className="h-24 flex items-center justify-between px-6 border-b border-slate-50">
                 <div className="flex items-center overflow-hidden">
                     <div
                         className="flex items-center cursor-pointer min-w-max"
                         onClick={() => navigate('/dashboard')}
                     >
-                        <div className="p-1.5 bg-blue-50 rounded-xl mr-3 shadow-sm border border-blue-100/50">
-                            <img src={logo} alt="MEDBLOCK" className="h-8 w-8 object-contain" />
+                        <div className="p-2 bg-white rounded-2xl mr-4 shadow-sm border border-slate-100">
+                            <img src={logo} alt="MEDBLOCK" className="h-9 w-9 object-contain" />
                         </div>
 
                         {(!isCollapsed || isMobile) && (
@@ -79,11 +79,11 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                                 transition={{ duration: 0.2 }}
                                 className="flex flex-col"
                             >
-                                <h1 className="text-lg font-bold text-[#20305B] leading-none">
+                                <h1 className="text-xl font-black text-slate-900 leading-none tracking-tight">
                                     MEDBLOCK
                                 </h1>
-                                <span className="text-xs text-blue-600 font-bold tracking-tight mt-0.5">
-                                    PROVIDER PORTAL
+                                <span className="text-[10px] text-blue-600 font-black tracking-[0.2em] mt-1 uppercase">
+                                    Provider Portal
                                 </span>
                             </motion.div>
                         )}
@@ -93,15 +93,15 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                 {isMobile && (
                     <button
                         onClick={onMobileClose}
-                        className="ml-auto p-2 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
+                        className="ml-auto p-2 rounded-xl hover:bg-slate-50 text-slate-400 transition-colors"
                     >
-                        <X size={20} />
+                        <Cancel01Icon size={20} />
                     </button>
                 )}
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <nav className="flex-1 py-8 px-4 space-y-2 overflow-y-auto">
                 {navigation.map((item) => {
                     const isActive = pathname === item.href
                     return (
@@ -109,20 +109,20 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                             key={item.name}
                             to={item.href}
                             onClick={() => isMobile && onMobileClose?.()}
-                            className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${isActive
-                                ? 'bg-blue-50 text-blue-600'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            className={`flex items-center px-4 py-4 rounded-2xl transition-all duration-300 group ${isActive
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                 }`}
                         >
                             <item.icon
-                                size={20}
-                                className={`${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}
+                                size={22}
+                                className={`${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}`}
                             />
                             {(!isCollapsed || isMobile) && (
                                 <motion.span
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className="ml-3 font-medium text-sm whitespace-nowrap"
+                                    className={`ml-4 text-sm font-black tracking-wide whitespace-nowrap ${isActive ? 'text-white' : 'text-slate-500'}`}
                                 >
                                     {item.name}
                                 </motion.span>
@@ -133,28 +133,35 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
             </nav>
 
             {/* Footer / User */}
-            <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+            <div className="p-4 border-t border-slate-50 bg-slate-50/30">
                 {/* User Info */}
                 {(!isCollapsed || isMobile) && (
-                    <div className="mb-4 px-2">
-                        <p className="text-xs font-medium text-gray-500 uppercase">Logged in as</p>
-                        <p className="text-sm font-semibold text-gray-900 truncate mt-1">
-                            {providerName || 'Provider'}
-                        </p>
-                        <p className="text-xs text-gray-500 truncate font-mono" title={providerDID || ''}>
-                            {shortId(providerDID)}
-                        </p>
+                    <div className="mb-6 px-4 py-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Authenticated Identity</p>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center font-black text-slate-600">
+                                {providerName?.[0] || 'D'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-black text-slate-900 truncate">
+                                    {providerName || 'Healthcare Provider'}
+                                </p>
+                                <p className="text-[10px] text-blue-600 font-bold truncate tracking-tight" title={providerDID || ''}>
+                                    {shortId(providerDID)}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
 
                 {/* Logout */}
                 <button
                     onClick={handleLogout}
-                    className={`flex items-center w-full ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-3'
-                        } py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors`}
+                    className={`flex items-center w-full ${(isCollapsed && !isMobile) ? 'justify-center' : 'px-4'
+                        } py-4 text-rose-600 hover:bg-rose-50 rounded-2xl transition-all duration-200 group`}
                 >
-                    <LogOut size={20} />
-                    {(!isCollapsed || isMobile) && <span className="ml-3 text-sm font-medium">Logout</span>}
+                    <Logout01Icon size={22} className="group-hover:-translate-x-1 transition-transform" />
+                    {(!isCollapsed || isMobile) && <span className="ml-4 text-sm font-black uppercase tracking-widest">Sign Out</span>}
                 </button>
             </div>
         </div>
@@ -164,23 +171,23 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
         <>
             {/* Desktop Sidebar */}
             <motion.div
-                initial={{ width: 256 }}
-                animate={{ width: isCollapsed ? 80 : 256 }}
-                transition={{ duration: 0.3 }}
-                className={`hidden md:flex h-screen bg-white border-r border-gray-200 fixed left-0 top-0 z-50 flex-col shadow-lg ${className}`}
+                initial={{ width: 280 }}
+                animate={{ width: isCollapsed ? 100 : 280 }}
+                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                className={`hidden md:flex h-screen bg-white border-r border-slate-100 fixed left-0 top-0 z-50 flex-col shadow-2xl shadow-slate-100/50 ${className}`}
             >
                 {sidebarContent}
 
                 {/* Desktop Toggle Button - Centered on border */}
                 <button
                     onClick={onToggle}
-                    className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border border-gray-200 rounded-full shadow-md flex items-center justify-center text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:shadow-lg transition-all duration-300 z-[60] group"
+                    className="absolute -right-4 top-12 w-8 h-8 bg-white border border-slate-100 rounded-xl shadow-lg flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-100 hover:shadow-xl transition-all duration-300 z-[60] group"
                 >
                     <motion.div
                         animate={{ rotate: isCollapsed ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.4 }}
                     >
-                        <ChevronLeft size={14} className="group-hover:scale-110 transition-transform" />
+                        <ArrowLeft01Icon size={16} className="group-hover:scale-110 transition-transform" />
                     </motion.div>
                 </button>
             </motion.div>
@@ -195,14 +202,14 @@ export default function Sidebar({ isCollapsed, onToggle, isMobileOpen = false, o
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
                             onClick={onMobileClose}
-                            className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+                            className="md:hidden fixed inset-0 bg-slate-900/40 z-40 backdrop-blur-md"
                         />
                         <motion.div
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="md:hidden fixed left-0 top-0 bottom-0 w-[280px] bg-white z-50 shadow-2xl"
+                            className="md:hidden fixed left-0 top-0 bottom-0 w-[300px] bg-white z-50 shadow-2xl"
                         >
                             {sidebarContent}
                         </motion.div>
