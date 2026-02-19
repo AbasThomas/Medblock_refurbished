@@ -8,7 +8,7 @@ import {
     UserGroupIcon,
     File01Icon,
     Clock01Icon,
-    ActivityIcon,
+    Activity01Icon,
     AlertCircleIcon,
     ArrowRight01Icon,
     Search01Icon,
@@ -114,7 +114,7 @@ export default function Dashboard() {
             title: 'Interoperability',
             value: dashboardStats.interoperabilityCount.toString(),
             change: 'Connected systems',
-            icon: ActivityIcon,
+            icon: Activity01Icon,
             color: 'bg-indigo-500'
         },
     ]
@@ -155,7 +155,7 @@ export default function Dashboard() {
             >
                 <div className="relative z-10 max-w-2xl">
                     <div className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-blue-400 mb-6">
-                        <ActivityIcon size={16} />
+                        <Activity01Icon size={16} />
                         Command Center Active
                     </div>
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Welcome back, {providerName || 'Doctor'}.</h1>
@@ -312,7 +312,7 @@ export default function Dashboard() {
                             className="w-full flex items-center justify-between p-4 bg-slate-50 text-slate-700 rounded-xl hover:bg-slate-100 transition-colors group border border-slate-100"
                         >
                             <div className="flex items-center gap-3">
-                                <ActivityIcon size={22} />
+                                <Activity01Icon size={22} />
                                 <span className="font-bold">Interoperability</span>
                             </div>
                             <ArrowRight01Icon size={18} className="text-slate-300 group-hover:text-slate-700 transition-all group-hover:translate-x-1" />

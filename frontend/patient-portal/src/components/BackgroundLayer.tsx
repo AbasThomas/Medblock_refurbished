@@ -1,116 +1,196 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { gsap } from 'gsap'
+"use client"
 
-const GRID_SIZE = 64
-const GRID_HEIGHT = 560
+import { useEffect, useRef } from 'react'
 
-const BackgroundLayer: React.FC = () => {
-    const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1920)
-    const [height, setHeight] = useState<number>(GRID_HEIGHT)
-    const verticalRefs = useRef<SVGLineElement[]>([])
-    const horizontalRefs = useRef<SVGLineElement[]>([])
-    const backgroundRef = useRef<HTMLDivElement>(null)
+const COLS = 20
+const ROWS = 13
+const LINE_COLOR = 'rgba(148, 163, 184, 0.35)'
+const BLUE_CELLS = generateBlueCells()
 
-    useEffect(() => {
-        const onResize = () => {
-            setWidth(window.innerWidth)
-            setHeight(Math.max(GRID_HEIGHT, Math.floor(window.innerHeight * 0.62)))
-        }
+function generateBlueCells() {
+  const cells: { col: number; row: number; opacity: number }[] = []
+  const seed = [
+    [2, 1],
+    [5, 3],
+    [9, 2],
+    [15, 5],
+    [3, 8],
+    [12, 7],
+    [18, 3],
+    [6, 1],
+    [1, 4],
+    [16, 9],
+    [7, 5],
+    [14, 11],
+    [4, 2],
+    [0, 10],
+    [11, 0],
+    [19, 6],
+    [8, 12],
+    [17, 1],
+    [10, 9],
+    [3, 6],
+  ]
 
-        onResize()
-        window.addEventListener('resize', onResize)
-        return () => window.removeEventListener('resize', onResize)
-    }, [])
+  for (const [col, row] of seed) {
+    cells.push({ col, row, opacity: 0.04 + Math.random() * 0.08 })
+  }
 
-    const verticalLines = useMemo(
-        () => Array.from({ length: Math.ceil(width / GRID_SIZE) + 2 }, (_, i) => i * GRID_SIZE),
-        [width],
-    )
-    const horizontalLines = useMemo(
-        () => Array.from({ length: Math.ceil(height / GRID_SIZE) + 2 }, (_, i) => i * GRID_SIZE),
-        [height],
-    )
-
-    useLayoutEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.set(verticalRefs.current, { scaleY: 0, opacity: 0.18, transformOrigin: 'center top' })
-            gsap.set(horizontalRefs.current, { scaleX: 0, opacity: 0.15, transformOrigin: 'left top' })
-
-            const drawTl = gsap.timeline({ defaults: { ease: 'power2.out' } })
-            drawTl
-                .to(verticalRefs.current, {
-                    scaleY: 1,
-                    opacity: 0.5,
-                    stagger: { each: 0.04, from: 'start' },
-                    duration: 0.6,
-                })
-                .to(
-                    horizontalRefs.current,
-                    {
-                        scaleX: 1,
-                        opacity: 0.35,
-                        stagger: { each: 0.025, from: 'start' },
-                        duration: 0.45,
-                    },
-                    0.25,
-                )
-        })
-
-        return () => ctx.revert()
-    }, [horizontalLines.length, verticalLines.length])
-
-    return (
-        <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-            <div
-                ref={backgroundRef}
-                className="absolute inset-x-0 top-0 opacity-70"
-                style={{
-                    height: `${height}px`,
-                    backgroundColor: '#f8fafc',
-                }}
-            />
-
-            <svg
-                className="absolute inset-x-0 top-0"
-                width={width}
-                height={height}
-                viewBox={`0 0 ${width} ${height}`}
-                preserveAspectRatio="none"
-                style={{
-                    opacity: 0.6
-                }}
-            >
-                {verticalLines.map((x, idx) => (
-                    <line
-                        key={`v-${x}-${idx}`}
-                        ref={(el) => {
-                            if (el) verticalRefs.current[idx] = el
-                        }}
-                        x1={x}
-                        y1={0}
-                        x2={x}
-                        y2={height}
-                        stroke="rgba(102, 126, 177, 0.45)"
-                        strokeWidth="1"
-                    />
-                ))}
-                {horizontalLines.map((y, idx) => (
-                    <line
-                        key={`h-${y}-${idx}`}
-                        ref={(el) => {
-                            if (el) horizontalRefs.current[idx] = el
-                        }}
-                        x1={0}
-                        y1={y}
-                        x2={width}
-                        y2={y}
-                        stroke="rgba(102, 126, 177, 0.35)"
-                        strokeWidth="1"
-                    />
-                ))}
-            </svg>
-        </div>
-    )
+  return cells
 }
 
-export default BackgroundLayer
+export default function BackgroundLayer() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const animRef = useRef<number>()
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let dpr = window.devicePixelRatio || 1
+    let width = window.innerWidth
+    let height = window.innerHeight
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1
+      width = window.innerWidth
+      height = window.innerHeight
+      canvas.width = width * dpr
+      canvas.height = height * dpr
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    const startTime = performance.now()
+    const totalVerticalDuration = 1800
+    const totalHorizontalDuration = 1400
+    const verticalDelay = 100
+    const horizontalDelay = 200
+
+    function draw(now: number) {
+      const elapsed = now - startTime
+
+      ctx.clearRect(0, 0, width, height)
+
+      const cellW = width / COLS
+      const cellH = height / ROWS
+
+      for (const cell of BLUE_CELLS) {
+        const x = cell.col * cellW
+        const y = cell.row * cellH
+        ctx.fillStyle = `rgba(59, 130, 246, ${cell.opacity})`
+        ctx.fillRect(x, y, cellW, cellH)
+      }
+
+      for (let i = 0; i <= COLS; i++) {
+        const lineDelay = verticalDelay + (i / COLS) * totalVerticalDuration
+        const lineElapsed = elapsed - lineDelay
+        if (lineElapsed <= 0) continue
+
+        const progress = Math.min(lineElapsed / (totalVerticalDuration * 0.6), 1)
+        const eased = 1 - Math.pow(1 - progress, 3)
+
+        const x = i * cellW
+        const lineHeight = height * eased
+
+        ctx.beginPath()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, lineHeight)
+        ctx.strokeStyle = LINE_COLOR
+        ctx.lineWidth = 1
+        ctx.stroke()
+      }
+
+      for (let j = 0; j <= ROWS; j++) {
+        const lineDelay = horizontalDelay + (j / ROWS) * totalHorizontalDuration
+        const lineElapsed = elapsed - lineDelay
+        if (lineElapsed <= 0) continue
+
+        const progress = Math.min(lineElapsed / (totalHorizontalDuration * 0.6), 1)
+        const eased = 1 - Math.pow(1 - progress, 3)
+
+        const y = j * cellH
+        const lineWidth = width * eased
+
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(lineWidth, y)
+        ctx.strokeStyle = LINE_COLOR
+        ctx.lineWidth = 1
+        ctx.stroke()
+      }
+
+      const maxTime =
+        horizontalDelay + totalHorizontalDuration + totalHorizontalDuration * 0.6
+
+      if (elapsed < maxTime + 200) {
+        animRef.current = requestAnimationFrame(draw)
+      }
+    }
+
+    animRef.current = requestAnimationFrame(draw)
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current)
+      }
+    }
+  }, [])
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+      <canvas ref={canvasRef} className="block w-full h-full" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          maskImage:
+            'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, black 100%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, black 100%)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+        }}
+      />
+      <div
+        className="pointer-events-none absolute top-0 left-0 right-0 h-28"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0))',
+          filter: 'blur(24px)',
+        }}
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-28"
+        style={{
+          background:
+            'linear-gradient(0deg, rgba(255,255,255,0.9), rgba(255,255,255,0))',
+          filter: 'blur(24px)',
+        }}
+      />
+      <div
+        className="pointer-events-none absolute top-0 bottom-0 left-0 w-28"
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0))',
+          filter: 'blur(24px)',
+        }}
+      />
+      <div
+        className="pointer-events-none absolute top-0 bottom-0 right-0 w-28"
+        style={{
+          background:
+            'linear-gradient(270deg, rgba(255,255,255,0.8), rgba(255,255,255,0))',
+          filter: 'blur(24px)',
+        }}
+      />
+    </div>
+  )
+}
